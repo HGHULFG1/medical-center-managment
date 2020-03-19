@@ -1,0 +1,20 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="medical_center_managment.doctor_list_view">
+      <field name="name"> list</field>
+      <field name="model">res.partner</field>
+      <field name="arch" type="xml">
+        <tree editable = "bottom" >
+          <field name="name"/>
+          <field name="speciality_id"/>
+          <field name="emergency_phone"/>
+          <field name="years_of_experience"/>
+          <field name="category_id" widget = "many2many_tags" />
+        </tree>
+      </field>
+    </record>
+
+  </data>
+</odoo>

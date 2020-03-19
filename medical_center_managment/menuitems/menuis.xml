@@ -1,0 +1,6 @@
+<odoo>
+	<data>
+    <menuitem name="Doctors" id="medical_center_managment" parent="contacts.res_partner_menu_contacts"
+              action="medical_center_managment.doctor_action_window"/>
+    </data>
+</odoo>
