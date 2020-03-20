@@ -6,20 +6,7 @@ import werkzeug.wrappers
 from datetime import datetime
 from datetime import timedelta,timezone
 from odoo import http
-from odoo.addons.restful.common import invalid_response, valid_response
 from odoo.http import request
-from odoo.tools.profiler import profile
-import pytz
-import socket
-import websockets
-import uvloop
-from odoo.addons.restful.common import (
-    extract_arguments,
-    invalid_response,
-    valid_response,
-)
-from socket import *
-
 
 _logger = logging.getLogger(__name__)
 
