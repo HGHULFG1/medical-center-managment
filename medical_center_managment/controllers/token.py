@@ -45,7 +45,6 @@ class AccessToken(http.Controller):
     @http.route(
         "/api/auth/token", methods=["GET"], type="http", auth="none", csrf=False
     )
-    @profile
     def token(self, **post):
 
         """The token URL to be used for getting the access_token:
