@@ -1,2 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_medical_center_managment_medical_center_managment,medical_center_managment.medical_center_managment,model_medical_center_managment_medical_center_managment,base.group_user,1,1,1,1
+doctor_specialit_access_rights,doctor speciality access rights,medical_center_managment.model_doctor_speciality,base.group_user,1,1,1,1
+doctor_status_access_rights,doctor status access rights,medical_center_managment.model_doctor_status,base.group_user,1,1,1,1
+doctor_field_study_access_rights,field study access rights,medical_center_managment.model_field_study,base.group_user,1,1,1,1
+doctor_specialit_tags_access_rights,speciality tags access rights,medical_center_managment.model_speciality_tag,base.group_user,1,1,1,1
+access_token_access_rights,Access token add access rights,medical_center_managment.model_api_access_token,base.group_user,1,1,1,1

@@ -101,7 +101,8 @@ then the system will add the duration in the visit form.
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
+        'data/data.xml',
         'views/tree/doctor.xml',
         'actions/window_actions/doctor.xml',
         'menuitems/menuis.xml',

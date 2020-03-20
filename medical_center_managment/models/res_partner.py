@@ -3,7 +3,7 @@ from odoo import models, fields, api
 
 class DoctorStatus(models.Model):
 	_name = "doctor.status"
-	_description = "Doctor Speciality"
+	_description = "Doctor Status"
 	_order = "name, id"
 	name = fields.Char("Name", required = True, Translate = True)
 	
@@ -15,7 +15,7 @@ class FieldStudy(models.Model):
 
 class DoctorSpecialityTags(models.Model):
 	_name = "speciality.tag"
-	_description = "Doctor Speciality"
+	_description = "Speciality Tags"
 	_order = "name, id"
 	name = fields.Char("Name", required = True, Translate = True)
 class DoctorSpeciality(models.Model):
