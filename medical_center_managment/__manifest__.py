@@ -108,7 +108,6 @@ then the system will add the duration in the visit form.
         'menuitems/menuis.xml',
         'views/templates.xml',
         'views/res_users.xml',
-        'views/ir_model.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
