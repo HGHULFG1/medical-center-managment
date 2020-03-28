@@ -20,7 +20,6 @@ class AccessToken(http.Controller):
     @http.route(
         "/api/auth/token", methods=["GET"], type="http", auth="none", csrf=False
     )
-    @profile
     def token(self, **post):
  
         _token = request.env["api.access_token"]
