@@ -1,52 +1,19 @@
 import json
 import logging
-import threading
-import asyncio
-import werkzeug.wrappers
 from datetime import datetime
 from datetime import timedelta,timezone
 from odoo import http
 from odoo.http import request
-from odoo.tools.profiler import profile
-import pytz
-import socket
-import websockets
-import uvloop
-
-from socket import *
 
 
 _logger = logging.getLogger(__name__)
 
 expires_in = "medical_center_managment.access_token_expires_in"
 
-
-# async def hello(websocket, path):
-#     name = await websocket.recv()
-#     print(f"< {name}")
-
-#     greeting = f"Hello {name}!"
-
-#     await websocket.send(greeting)
-#     print(f"> {greeting}")
-# listen_s = socket.socket()
-# websockets.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-# start_server = websockets.serve(hello, "localhost", 8069)
-
-# asyncio.get_event_loop().run_until_complete(start_server)
-# asyncio.get_event_loop().run_forever()
-
-
 class AccessToken(http.Controller):
     """."""
 
     def __init__(self):
-
-
-
-
-    # Blocking call which returns when the hello_world() coroutine is done
-        
         self._token = request.env["api.access_token"]
         self._expires_in = request.env.ref(expires_in).sudo().value
         self.value = False
@@ -55,31 +22,7 @@ class AccessToken(http.Controller):
     )
     @profile
     def token(self, **post):
-
-        """The token URL to be used for getting the access_token:
-        prin
-        Args:
-            **post must contain login and password.
-        Returns:
-
-            returns https response code 404 if failed error message in the body in json format
-            and status code 202 if successful with the access_token.
-        Example:
-           import requests
-
-           headers = {'content-type': 'text/plain', 'charset':'utf-8'}
-
-           data = {
-               'login': 'admin',
-               'password': 'admin',
-               'db': 'galago.ng'
-            }
-           base_url = 'http://odoo.ng'
-           eq = requests.post(
-               '{}/api/auth/token'.format(base_url), data=data, headers=headers)
-           content = json.loads(req.content.decode('utf-8'))
-           headers.update(access-token=content.get('access_token'))
-        """
+ 
         _token = request.env["api.access_token"]
         params = ["login", "password"]
         params = {key: post.get(key) for key in params if post.get(key)}
@@ -164,20 +107,6 @@ class AccessToken(http.Controller):
             ),
         )
 
-    #     public class DTO<T>
-
-    # {
-
-    #     public string Error { get; set; }
-
-    #     public string Message { get; set; }
-
-    #     public bool Success { get; set; }
-
-    #     public T Value { get; set; }
-
-    # }
-        # Generate tokens
         access_token = _token.find_one_or_create_token(user_id=uid, create=True)
         # Successful response:
         user = request.env["res.users"].search([('id','=',uid)])
@@ -185,8 +114,6 @@ class AccessToken(http.Controller):
         expiry_date_time_zone_user = (datetime.now() + timedelta(minutes=50000))
         
     
-        # StampDate = datetime.fromtimestamp(user.write_date)
-        # No need for the ID field as the login is unique/db
         value = {
                     'UserName':user.login,
                     'Description' : user.name,
