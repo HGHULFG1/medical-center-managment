@@ -105,10 +105,10 @@ class ResPartner(models.Model):
 	birth_date = fields.Date("Date of Birth")
 	years_of_experience = fields.Integer("Experience")
 	monthes_of_experience = fields.Integer()
-	medical_center_ids = fields.Many2many("res.partner", "doctor_center_rel", string = "Medical Centers", domain = "[('partner_type','=','center')]")
+	medical_center_ids = fields.Many2many("res.partner", "doctor_center_rel","doctor_id","center_id", string = "Medical Centers", domain = "[('partner_type','=','center')]")
 	dr_id = fields.Many2one("res.partner")
 	clinic_ids = fields.One2many("res.partner", "dr_id" ,string = "Clinics", domain = "[('partner_type','=','clinic')]")
-	hospital_ids = fields.Many2many("res.partner","doctor_hospital_rel", string = "Hospitals", domain = "[('partner_type','=','hospital')]")
+	hospital_ids = fields.Many2many("res.partner","doctor_hospital_rel", "doctor_id","hospital_id",  string = "Hospitals", domain = "[('partner_type','=','hospital')]")
 
 	#doctor fields
 	emergency_phone = fields.Char("Emergency Phone")
