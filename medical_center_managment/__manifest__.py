@@ -97,17 +97,32 @@ then the system will add the duration in the visit form.
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','contacts'],
+    'depends': ['base','contacts','resource'],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
         'data/data.xml',
         'views/tree/doctor.xml',
+        'views/tree/medicals.xml',
+        'views/tree/patient_medical_scheduel.xml',
+        'views/kanban/medicals.xml',
+        'actions/window_actions/appointments.xml',
+        'actions/window_actions/doctor_patient.xml',
+        'actions/window_actions/patient_doctor.xml',
+        'actions/window_actions/patient_medical.xml',
+        'actions/window_actions/doctor_appointment.xml',
+        'views/form/res_partner.xml',
+        'views/form/medicals.xml',
+        'views/form/patient_scheduel_medical.xml',
+        'views/form/doctor_appointment.xml',
+        'views/tree/doctor_appointment.xml',
+        'views/tree/doctor_timesheet.xml',
         'actions/window_actions/doctor.xml',
+        'actions/window_actions/medicals.xml',
         'menuitems/menuis.xml',
         'views/templates.xml',
-        'views/res_users.xml',
+        'views/asset.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

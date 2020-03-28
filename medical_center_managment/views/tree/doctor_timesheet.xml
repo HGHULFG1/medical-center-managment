@@ -1,0 +1,20 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="medical_center_managment.doctor_timesheet_list_view">
+      <field name="name">Appointments</field>
+      <field name="model">doctor.timesheet</field>
+      <field name="arch" type="xml">
+        <tree editable = "top" class = "date_of_week_address_tree">
+            <field name = "adress_id" class="date_of_week_address" />
+            <field name = "dayofweek" class="date_of_week"/>
+            <field name = "day_period" class="date_of_week"/>
+      			<field name = "hour_from" class="date_of_week_time" widget= "float_time" />
+      			<field name = "hour_to" class="date_of_week_time" widget= "float_time"/>
+      			<field name = "date_from" class="date_of_week"/>
+      			<field name = "date_to" class="date_of_week"/>
+        </tree>
+      </field>
+    </record>
+
+  </data>
+</odoo>

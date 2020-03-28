@@ -1,0 +1,15 @@
+<odoo>
+	<data>
+		    <record model="ir.actions.act_window" id="medical_center_managment.patient_doctor_window_action">
+		      <field name="name">Doctors</field>
+		      <field name="res_model">desease.level.doctor.partner</field>
+		      <field name="view_mode">list,form</field>
+		      <field name = "domain">[("partner_id", "=" , active_id)]</field>
+<!-- 		      <field name="view_ids" eval="[(5, 0, 0),(0, 0, {'view_mode': 'tree', 'view_id': ref('medical_center_managment.doctor_list_view')}),(0, 0, {'view_mode': 'form', 'view_id': ref('medical_center_managment.view_form_res_partner')})]"/> -->
+<!-- 		      <field name="context">{
+                'pivot_row_groupby': ['user_id'],
+                'default_partner_type': "dr",
+            }</field> -->
+		    </record>
+	</data>
+</odoo>

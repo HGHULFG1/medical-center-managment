@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <data>
+        <record id="medical_center_managment.view_form_res_partner" model="ir.ui.view">
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+   <form string="Doctors">
+                <div class="alert alert-warning oe_edit_only" role="alert" attrs="{'invisible': [('same_name', '=', False)]}">
+                  A partner with the same <span><span class="o_vat_label">Name</span></span> already exists, are you sure to create a new one?
+                </div> 
+
+                 <sheet>
+                   <div class="oe_button_box" name="button_box" groups="base.group_user">
+                            <button class="oe_stat_button" name="%(medical_center_managment.doctor_patient_action_window)d" type="action" icon="fa-user">
+                                <field string="Patients" name="patient_count" widget="statinfo"/>
+                            </button>
+                             <button class="oe_stat_button" name="%(medical_center_managment.patient_doctor_window_action)d" type="action" icon="fa-user-md">
+                                <field string="Doctors" name="doctor_count" widget="statinfo"/>
+                            </button>
+                            
+
+                            <button class="oe_stat_button" name="%(medical_center_managment.patient_medicals_kanban_view)d" type="action" icon="fa-plus-circle">
+                                <field string="Medicals" name="medical_count" widget="statinfo"/>
+                            </button>
+
+                            <button class="oe_stat_button" name="%(medical_center_managment.doctor_appointment_action_window)d" type="action" icon="fa-plus-circle">
+                                <field string="Appointments" name="doctor_appointment_count" widget="statinfo"/>
+                            </button>
+
+                            <button class="oe_stat_button" name="%(medical_center_managment.patient_appointment_action_window)d" type="action" icon="fa-plus-circle">
+                                <field string="Appointments" name="patient_appointment_count" widget="statinfo"/>
+                            </button>
+                    </div>
+                  
+           
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                    <field name="image_1920" widget="image" class="oe_avatar" options="{&quot;preview_image&quot;: &quot;image_128&quot;}"/>
+                    <br/>
+                    <div class="oe_title">
+                        <field name="is_company" invisible="1"/>
+                        <field name = "same_name" invisible = "1" />
+                        <field name="commercial_partner_id" invisible="1"/>
+                        <field name="active" invisible="1"/>
+                        <field name="partner_type" widget="radio" class="oe_edit_only" options="{'horizontal': true}"/>
+                        <h1>
+                            <field name="name" default_focus="1" placeholder="Name" />
+                        </h1>
+
+                    </div>
+                    <group>
+                        <group>
+                                 <label for="" name="address_name">
+                                <b>Residence Address</b>
+                            </label>
+                            <div class="o_address_format">
+
+                                <field name="street" placeholder="Street..." class="o_address_street" string = "Address" />
+                                <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                <field name="city" placeholder="City" class="o_address_city" />
+                                <field name="state_id" class="o_address_state" placeholder="State" options="{&quot;no_open&quot;: True}" context="{'country_id': country_id, 'zip': zip}"/>
+                                <field name="zip" placeholder="ZIP" class="o_address_zip" />
+                                <field name="country_id" placeholder="Country" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}" />
+                            </div>
+                            <field name="study_field_id" placeholder="Medecine.." />
+                            <field name="speciality_id" placeholder="EMERGENCY MEDECIN.." />
+                            
+                        </group>
+                        <group>
+                            <field name="birth_date" />
+                            <field name="emergency_phone" widget="phone"/>
+                            <field name="phone" widget="phone"/>
+                            <field name="mobile" widget="phone"/>
+                            <field name="user_ids" invisible="1"/>
+                            <field name="email" widget="email" context="{'gravatar_image': True}" attrs="{'required': [('user_ids','!=', [])]}"/>
+                            <field name="website" widget="url" placeholder="e.g. https://www.odoo.com"/>
+                            <field name="title" options="{&quot;no_open&quot;: True}" placeholder="e.g. Mister" />
+                            <field name="gender" options="{&quot;no_open&quot;: True}" />
+                            <field name="active_lang_count" invisible="1"/>
+                            <label for="lang" attrs="{'invisible': [('active_lang_count', '&lt;=', 1)]}"/>
+                            <div class="o_row" attrs="{'invisible': [('active_lang_count', '&lt;=', 1)]}">
+                                <field name="lang"/>
+                                <button type="action" name="55" class="btn-sm btn-link mb4 fa fa-globe" aria-label="More languages" groups="base.group_system" title="More languages"/>
+                            </div>
+                            <field name="category_id" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tags..."/>
+                        </group>
+                    </group>
+
+                    <notebook colspan="4">
+                        <page string="Clinics" autofocus="autofocus">
+                            <field name="clinic_ids" mode="kanban">
+                                <kanban>
+                                    <field name="id"/>
+                                    <field name="name"/>
+                                    <field name="image_128"/>
+                                    <field name="country_id"/>
+                                    <field name="zip"/>
+                                    <field name="city"/>
+                                    <field name="state_id"/>
+                                    <field name="partner_type" />
+
+                                    <!-- fields in form x2many view to diminish requests -->
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                           
+                                                <div class="oe_kanban_details">
+                                                    <field name="name"/>
+                                                   
+                                                        <div>
+                                                            <field name="zip"/>
+                                                            <field name="city"/>
+                                                        </div>
+                                                        <field t-if="record.state_id.raw_value" name="state_id"/>
+                                                        <field name="country_id"/>
+                                                    </div>
+                                                    <div t-if="record.phone.raw_value">Phone: <field name="phone" widget="phone"/></div>
+                                                   
+                                        </t>
+                                    </templates>
+                                </kanban>
+                                <form string="Contact / Address" context="{'partner_type': 'clinic'}">
+                                    <sheet>
+                                            <div class="oe_title">
+                                            <h1>
+                                                <field name="name" default_focus="1" placeholder="Clinic Name"/>
+                                                    <field name="partner_type" context = "{'default_partner_type':'clinic'}" />
+
+                                            </h1>
+
+                                            </div>
+                                            <br/>
+                           <group>
+                                <label for="" name="address_name">
+                                <b>Clinic Address</b>
+                            </label>
+                                        <div class="o_address_format">
+
+                                            <field name="street" placeholder="Street..." class="o_address_street" string = "Address" />
+                                            <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                            <field name="city" placeholder="City" class="o_address_city" />
+                                            <field name="state_id" class="o_address_state" placeholder="State" options="{&quot;no_open&quot;: True}" context="{'country_id': country_id, 'zip': zip}"/>
+                                            <field name="zip" placeholder="ZIP" class="o_address_zip" />
+                                            <field name="country_id" placeholder="Country" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}" />
+                                        </div>
+                            </group>
+                                            <group colspan="5">
+                                                <field name="email" widget="email"/>
+                                                <field name="phone" widget="phone"/>
+                                            </group>
+                                            <group colspan="1">
+                                                <field name="image_128" widget="image" class="oe_avatar" nolabel="1" options="{'image_preview': 'image_128'}"/>
+                                            </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+
+                        <page name="centers" string="Medical Centers">
+                          <field name="medical_center_ids" mode="kanban">
+                                <kanban>
+                                    <field name="id"/>
+                                    <field name="name"/>
+                                    <field name="image_128"/>
+                                    <field name="country_id"/>
+                                    <field name="zip"/>
+                                    <field name="city"/>
+                                    <field name="state_id"/>
+                                    <!-- fields in form x2many view to diminish requests -->
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                           
+                                                <div class="oe_kanban_details">
+                                                    <field name="name"/>
+                                                   
+                                                        <div>
+                                                            <field name="zip"/>
+                                                            <field name="city"/>
+                                                        </div>
+                                                        <field t-if="record.state_id.raw_value" name="state_id"/>
+                                                        <field name="country_id"/>
+                                                    </div>
+                                                    <div t-if="record.phone.raw_value">Phone: <field name="phone" widget="phone"/></div>
+                                                   
+                                        </t>
+                                    </templates>
+                                </kanban>
+                           <form string="Hospitals">
+                                    <sheet>
+                                            <div class="oe_title">
+                                            <h1>
+                                                <field name="name" default_focus="1" placeholder="Hospital Name"/>
+                                            </h1>
+
+                                            </div>
+                                            <br/>
+                           <group>
+                                <label for="" name="address_name">
+                                <b>Hospital Address</b>
+                            </label>
+                                        <div class="o_address_format">
+
+                                            <field name="street" placeholder="Street..." class="o_address_street" string = "Address" />
+                                            <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                            <field name="city" placeholder="City" class="o_address_city" />
+                                            <field name="state_id" class="o_address_state" placeholder="State" options="{&quot;no_open&quot;: True}" context="{'country_id': country_id, 'zip': zip}"/>
+                                            <field name="zip" placeholder="ZIP" class="o_address_zip" />
+                                            <field name="country_id" placeholder="Country" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}" />
+                                        </div>
+                            </group>
+                                            <group colspan="5">
+                                                <field name="email" widget="email"/>
+                                                <field name="phone" widget="phone"/>
+                                            </group>
+                                            <group colspan="1">
+                                                <field name="image_128" widget="image" class="oe_avatar" nolabel="1" options="{'image_preview': 'image_128'}"/>
+                                            </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page name="hospitales" string="Hospitals">
+                          <field name="hospital_ids" mode="kanban">
+                                <kanban>
+                                    <field name="id"/>
+                                    <field name="name"/>
+                                    <field name="image_128"/>
+                                    <field name="country_id"/>
+                                    <field name="zip"/>
+                                    <field name="city"/>
+                                    <field name="state_id"/>
+                                    <!-- fields in form x2many view to diminish requests -->
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                           
+                                                <div class="oe_kanban_details">
+                                                    <field name="name"/>
+                                                   
+                                                        <div>
+                                                            <field name="zip"/>
+                                                            <field name="city"/>
+                                                        </div>
+                                                        <field t-if="record.state_id.raw_value" name="state_id"/>
+                                                        <field name="country_id"/>
+                                                    </div>
+                                                    <div t-if="record.phone.raw_value">Phone: <field name="phone" widget="phone"/></div>
+                                                   
+                                        </t>
+                                    </templates>
+                                </kanban>
+                           <form string="Hospitals">
+                                    <sheet>
+                                            <div class="oe_title">
+                                            <h1>
+                                                <field name="name" default_focus="1" placeholder="Hospital Name"/>
+                                            </h1>
+
+                                            </div>
+                                            <br/>
+                           <group>
+                                <label for="" name="address_name">
+                                <b>Hospital Address</b>
+                            </label>
+                                        <div class="o_address_format">
+
+                                            <field name="street" placeholder="Street..." class="o_address_street" string = "Address" />
+                                            <field name="street2" placeholder="Street 2..." class="o_address_street"/>
+                                            <field name="city" placeholder="City" class="o_address_city" />
+                                            <field name="state_id" class="o_address_state" placeholder="State" options="{&quot;no_open&quot;: True}" context="{'country_id': country_id, 'zip': zip}"/>
+                                            <field name="zip" placeholder="ZIP" class="o_address_zip" />
+                                            <field name="country_id" placeholder="Country" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}" />
+                                        </div>
+                                    </group>
+                                            <group colspan="5">
+                                                <field name="email" widget="email"/>
+                                                <field name="phone" widget="phone"/>
+                                            </group>
+                                            <group colspan="1">
+                                                <field name="image_128" widget="image" class="oe_avatar" nolabel="1" options="{'image_preview': 'image_128'}"/>
+                                            </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+
+                        <page name="diseases" string="Diseases">
+                            <field name="disease_ids">
+                                <tree editable = "bottom" >
+                                    <field name = "desease_id" />
+                                    <field name = "level_id" />
+                                    <field name = "doctor_id" />
+                                </tree>
+                            </field>
+                        </page>
+
+
+                        <page name="timesheet" string="Timesheet">
+                           <group string = "Time Planning">
+                            <sheet>
+                            <field name="timesheet_ids" widget = "section_one2many" >
+                             </field>
+                         </sheet>
+                         </group>
+                        </page>
+
+
+                        <page name="internal_notes" string="Internal Notes">
+                            <field name="comment" placeholder="Internal note..."/>
+                        </page>
+
+
+
+                    </notebook>
+                </sheet>
+                </form>
+            
+            </field>
+        </record>
+    </data>
+</odoo>

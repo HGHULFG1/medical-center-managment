@@ -3,10 +3,10 @@
     <!-- explicit list view definition -->
 
     <record model="ir.ui.view" id="medical_center_managment.doctor_list_view">
-      <field name="name"> list</field>
+      <field name="name">Doctor List</field>
       <field name="model">res.partner</field>
       <field name="arch" type="xml">
-        <tree editable = "bottom" >
+        <tree>
           <field name="name"/>
           <field name="speciality_id"/>
           <field name="emergency_phone"/>

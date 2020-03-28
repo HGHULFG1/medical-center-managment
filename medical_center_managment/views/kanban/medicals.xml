@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+        <odoo>
+           <data>
+                <record id="medical_center_managment.medicals_view_kanban" model="ir.ui.view">
+                    <field name="model">patient.medicals</field>
+                    <field name="arch" type="xml">
+                                        <kanban>
+                                    <field name="id"/>
+                                    <field name="name"/>
+                                    <field name="disease_ids"/>
+
+                                    <!-- fields in form x2many view to diminish requests -->
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                           
+                                                <div class="oe_kanban_details">
+                                                    <field name="name"/>
+                                                   
+                                                        <div>
+                                                            <field name="name"/>
+                                                        </div>
+                                            
+                                                        <field name="disease_ids" widget = "many2many_tags" />
+                                                </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                        </record>
+                    </data>
+                </odoo>

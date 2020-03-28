@@ -7,6 +7,14 @@ from datetime import datetime
 from datetime import timedelta,timezone
 from odoo import http
 from odoo.http import request
+from odoo.tools.profiler import profile
+import pytz
+import socket
+import websockets
+import uvloop
+
+from socket import *
+
 
 _logger = logging.getLogger(__name__)
 
@@ -45,6 +53,7 @@ class AccessToken(http.Controller):
     @http.route(
         "/api/auth/token", methods=["GET"], type="http", auth="none", csrf=False
     )
+    @profile
     def token(self, **post):
 
         """The token URL to be used for getting the access_token:

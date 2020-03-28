@@ -1,0 +1,14 @@
+.o_column_sortable[data-name="dayofweek"]{width: 126px !important;
+text-align: center !important;}
+.o_column_sortable[data-name="adress_id"]{width: 260px !important;}
+.o_column_sortable[data-name="day_period"]{width: 90px !important;text-align: center !important;}
+.o_column_sortable[data-name="hour_from"]{width: 100px !important;text-align: center !important;text-align: center !important;}
+.o_column_sortable[data-name="hour_to"]{width: 100px !important;text-align: center !important;text-align: center !important;}
+.o_column_sortable[data-name="date_to"]{text-align: center !important;}
+.o_column_sortable[data-name="date_from"]{text-align: center !important;}
+
+.date_of_week{text-align: center !important;}
+.o_data_cell .o_field_cell .o_list_number .o_float_time_cell .o_required_modifie {text-align: -moz-center !important;}
+
+.date_of_week_time{text-align: center !important;padding-right: 31px !important;}
+

@@ -1,0 +1,19 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="medical_center_managment.medicals_tree_view">
+      <field name="name">Medicals List</field>
+      <field name="model">patient.medicals</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="scientific_name"/>
+          <field name="code"/>
+          <field name="side_effect_ids" widget = "many2many_tags" />
+        </tree>
+      </field>
+    </record>
+
+  </data>
+</odoo>

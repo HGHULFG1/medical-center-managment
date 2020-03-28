@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <data>
+        <record id="medical_center_managment.medicals_form_view" model="ir.ui.view">
+            <field name="model">patient.medicals</field>
+            <field name="arch" type="xml">
+            <form string="Medicals">
+                 <sheet>
+                     <div class="oe_title">
+                        <h1>
+                            <field name="name" default_focus="1" placeholder="Commercial Name" />
+                        </h1>
+                    </div>
+                        <group>
+                            <field name = "scientific_name" placeholder="Scientific Name" />
+                            <field name = "minimum_age" />
+                            <field name = "maximum_age" />
+                            <field name = "code" />
+                            <field name = "barcode" />
+                            <field name = "disease_ids" widget = "many2many_tags" />
+                        </group>
+                        <group string = "Side Effects">
+                            <field name = "side_effect_ids">
+                                <tree editable = "bottom" >
+                                    <field name = "disease_id" />
+                                    <field name = "causing_disease_id" />
+                                    <field name = "description" />
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
+
+                  

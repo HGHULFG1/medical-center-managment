@@ -1,0 +1,17 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="medical_center_managment.patient_medical_scheduel_tree_view">
+      <field name="name">Medical Patient Scheduel</field>
+      <field name="model">patient.medical.scheduel.scheduel</field>
+      <field name="arch" type="xml">
+        <tree editable = "bottom">
+            <field name="medical_id" />
+            <field name="scheduel_id" />
+        </tree>
+      </field>
+    </record>
+
+  </data>
+</odoo>
