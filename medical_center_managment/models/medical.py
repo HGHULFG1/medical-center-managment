@@ -1,5 +1,10 @@
 from odoo import models, fields, api
 
+class MedicalsTiters(models.Model):
+	_name = "patient.medical.titer"
+	_description = "Medicals Titers"
+	name = fields.Char("Value")
+
 
 class Medicals(models.Model):
 	_name = "patient.medicals"
@@ -12,6 +17,8 @@ class Medicals(models.Model):
 	maximum_age = fields.Integer("Don't Take If Above")
 	barcode = fields.Char('Barcode')
 	code = fields.Char("Code")
+	titer_ids = fields.Many2many("patient.medical.titer", string = "Titers")
+
 class MedicalSideEffect(models.Model):
 	_name = "patient.medicals.side.effect"
 	_description = "Medical Side Effect"
@@ -24,6 +31,8 @@ class MedicalSchedule(models.Model):
 	_name = "patient.medicals.scheduel"
 	_description = "Medical Scheduel"
 	name = fields.Char('Name')
+	start_date = fields.Date("Start Date", required = True)
+	start_end = fields.Date("Start End")
 	schedule_line_ids = fields.One2many('patient.medicals.scheduel.line', 'scheduel_id', string = "Scheduels")
 
 class MedicalScheduleLine(models.Model):
@@ -44,3 +53,5 @@ class MedicalSchedulePatient(models.Model):
 	patient_id = fields.Many2one("res.partner", string = "Patient", required = True, domain = "[('partner_type','=','patient')]")
 	medical_id = fields.Many2one("patient.medicals", string = "Medical", required = True)
 	scheduel_id = fields.Many2one("patient.medicals.scheduel", string = "Scheduel", required = True)
+	schedule_appointment = fields.Many2one("doctor.appointment", string = "Schedueld In")
+	schedule_date = fields.Many2one("doctor.appointment", string = "Schedueld Date", domain = "[('patient_id','=',patient_id)]")
