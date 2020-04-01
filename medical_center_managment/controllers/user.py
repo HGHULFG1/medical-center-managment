@@ -14,7 +14,7 @@ class UserSignUp(http.Controller):
     """."""
 
     @http.route(
-        "/api/signup", methods=["GET"], type="http", auth="none", csrf=False
+        "/api/signup", methods=["POST"], type="http", auth="none", csrf=False
     )
     def signup(self, **post):
         base_comapny = request.env.ref("base.main_company").sudo().id
