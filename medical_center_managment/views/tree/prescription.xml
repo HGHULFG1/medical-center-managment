@@ -1,0 +1,20 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="medical_center_managment.prescription_tree_view">
+      <field name="name">Prescription List</field>
+      <field name="model">doctor.prescription</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="appointment_id" readonly = "1"/>
+          <field name = "name" />
+          <field name="doctor_id"/>
+          <field name="patient_id"/>
+          <field name="medical_schedueled_ids" widget = "many2many_tags"/>
+        </tree>
+      </field>
+    </record>
+
+  </data>
+</odoo>

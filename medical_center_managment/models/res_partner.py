@@ -91,7 +91,7 @@ class Desease(models.Model):
 	name = fields.Char("Name", required = True, Translate = True)
 	level_ids = fields.Many2many('desease.level', 'desease_deasease_level_rel', string = 'Levels')
 	doctor_speciality_id = fields.Many2one("doctor.speciality", string = "Doctor Speciality", help = "What speciality shoulf a doctor have to deal with this desease")
-
+	color = fields.Integer('Color Index')
 
 class ResPartner(models.Model):
 	_inherit = "res.partner"
@@ -109,7 +109,7 @@ class ResPartner(models.Model):
 	dr_id = fields.Many2one("res.partner")
 	clinic_ids = fields.One2many("res.partner", "dr_id" ,string = "Clinics", domain = "[('partner_type','=','clinic')]")
 	hospital_ids = fields.Many2many("res.partner","doctor_hospital_rel", "doctor_id","hospital_id",  string = "Hospitals", domain = "[('partner_type','=','hospital')]")
-
+	blood_type = fields.Selection([("a+","A+"),("a-","A-"),("b+","B+"),("b-","B-"),("o+","O+"),("o-","O-"),("ab+","AB+"),("ab-","AB-")], string = "Blood Type")
 	#doctor fields
 	emergency_phone = fields.Char("Emergency Phone")
 	patient_count = fields.Integer("Patients", compute = "_compute_patient_count")
@@ -172,25 +172,25 @@ class ResPartner(models.Model):
 			else : 
 				record.doctor_count = len(record.disease_ids.ids)
 
-	
-	def write(self, vals):
-		for rec in self:
-			if '' in vals :
-				if vals['confirmation'] == '0' :
-					vals['force_customer_signature'] = False
-			if 'code' in vals :
-				if vals['code'] == any(['0','3']) :
-					if vals['code'] == '0' :
-						vals['stock_validation'] = '0'
-						vals['allow_price_change'] = False
-						vals['allow_free_item'] = False
-						vals['promotion'] = False
-						vals['allow_shelf_count'] = False
-						vals['suggestion'] = False
-			if 'allow_shelf_count' in vals :
-				if not vals["allow_shelf_count"] :
-					vals['suggestion'] = False
-					vals['minimum_value'] = 0
+	# To do add write method to res.partner 
+	# def write(self, vals):
+	# 	for rec in self:
+	# 		if '' in vals :
+	# 			if vals['confirmation'] == '0' :
+	# 				vals['force_customer_signature'] = False
+	# 		if 'code' in vals :
+	# 			if vals['code'] == any(['0','3']) :
+	# 				if vals['code'] == '0' :
+	# 					vals['stock_validation'] = '0'
+	# 					vals['allow_price_change'] = False
+	# 					vals['allow_free_item'] = False
+	# 					vals['promotion'] = False
+	# 					vals['allow_shelf_count'] = False
+	# 					vals['suggestion'] = False
+	# 		if 'allow_shelf_count' in vals :
+	# 			if not vals["allow_shelf_count"] :
+	# 				vals['suggestion'] = False
+	# 				vals['minimum_value'] = 0
 
 
-		return super(ResPartner, self).write(vals)
+	# 	return super(ResPartner, self).write(vals)

@@ -12,16 +12,26 @@
                                     <!-- fields in form x2many view to diminish requests -->
                                     <templates>
                                         <t t-name="kanban-box">
-                                           
-                                                <div class="oe_kanban_details">
-                                                    <field name="name"/>
-                                                   
-                                                        <div>
-                                                            <field name="name"/>
-                                                        </div>
-                                            
-                                                        <field name="disease_ids" widget = "many2many_tags" />
+                                            <div t-attf-class="oe_kanban_global_click">
+
+                                          <strong> <field name="name" /></strong>
+                                             <br/><br/>
+                                               <div class="oe_kanban_details">
+                                                <div>
+                                                
+                                                    <span class="oe_kanban_list_many2many">
+                                                       <field name="titer_ids" widget = "many2many_tags" options="{'color_field': 'color'}"/>
+                                                    </span>
                                                 </div>
+                                                <br/>
+                                                <span class="oe_kanban_list_many2many">
+                                                         <field name="disease_ids" widget = "many2many_tags" options="{'color_field': 'color'}" />
+                                                    </span>
+                                                   
+                                                    
+                                                     
+                                                </div>
+                                            </div>
                                         </t>
                                     </templates>
                                 </kanban>

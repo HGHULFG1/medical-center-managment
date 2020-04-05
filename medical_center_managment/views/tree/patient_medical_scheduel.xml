@@ -8,6 +8,7 @@
       <field name="arch" type="xml">
         <tree editable = "bottom">
             <field name="medical_id" />
+            <field name = "titer_id" />
             <field name="scheduel_id" />
         </tree>
       </field>

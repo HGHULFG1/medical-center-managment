@@ -3,12 +3,15 @@ from odoo import models, fields, api
 class MedicalsTiters(models.Model):
 	_name = "patient.medical.titer"
 	_description = "Medicals Titers"
-	name = fields.Char("Value")
+	name = fields.Char("Label")
+	value = fields.Float("Value")
+	color = fields.Integer('Color Index')
 
 
 class Medicals(models.Model):
 	_name = "patient.medicals"
 	_description = "Medicals"
+	_inherit = ['mail.thread.cc', 'mail.activity.mixin']
 	name = fields.Char("Commercial Name", required = True)
 	scientific_name = fields.Char("Scientific Name", required = True)
 	side_effect_ids = fields.One2many("patient.medicals.side.effect", 'medical_id', string = "Side Effects")
@@ -54,4 +57,10 @@ class MedicalSchedulePatient(models.Model):
 	medical_id = fields.Many2one("patient.medicals", string = "Medical", required = True)
 	scheduel_id = fields.Many2one("patient.medicals.scheduel", string = "Scheduel", required = True)
 	schedule_appointment = fields.Many2one("doctor.appointment", string = "Schedueld In")
-	schedule_date = fields.Many2one("doctor.appointment", string = "Schedueld Date", domain = "[('patient_id','=',patient_id)]")
+	appointment_id = fields.Many2one("doctor.appointment", string = "Schedueld Date", domain = "[('patient_id','=',patient_id),('doctor_id','=',doctor_id)]")
+	doctor_id = fields.Many2one("res.partner", string = "Doctor", domain = "[('partner_type','=','dr')]")
+	prescription_id = fields.Many2one("doctor.prescription", string = "Presciption")
+	titer_id = fields.Many2one("patient.medical.titer", string = "Titer")
+	@api.onchange("medical_id")
+	def _onchange_titer_domain(self):
+		return {'domain': {'titer_id': [('id', 'in', self.medical_id.titer_ids.ids)]}}

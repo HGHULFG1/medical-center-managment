@@ -24,6 +24,8 @@ class UserSignUp(http.Controller):
         user_data_in_json = yaml.load(user_data)
         partner_id = request.env["res.partner"].sudo().with_context(force_company = base_comapny,mail_create_nosubscribe=True).create({
             "name" : user_data_in_json["name"],
+            "partner_type" : user_data_in_json["partner_type"],
+            
             }).id
         users_same_login = request.env["res.users"].sudo().search([("login","=",user_data_in_json["login"])])
         if users_same_login :

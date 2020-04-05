@@ -15,3 +15,4 @@ patient_medicals_scheduel_line_patient_access_rights,Patient medicals scheduel l
 doctor_appointment_access_rights,Doctor appointment access rights,medical_center_managment.model_doctor_appointment,base.group_user,1,1,1,1
 doctor_timesheet_access_rights,Doctor timesheet access rights,medical_center_managment.model_doctor_timesheet,base.group_user,1,1,1,1
 patient_medical_titer_access_rights,Patient medical titer access rightds,medical_center_managment.model_patient_medical_titer,base.group_user,1,1,1,1
+doctor_prescription_access_rights,Doctor prescription access rights,medical_center_managment.model_doctor_prescription,base.group_user,1,1,1,1

@@ -1,0 +1,13 @@
+<odoo>
+	<data>
+		    <record model="ir.actions.act_window" id="medical_center_managment.presciption_appointment">
+		      <field name="name">Prescription</field>
+		      <field name="res_model">doctor.prescription</field>
+		      <field name="view_mode">list,form</field>
+		      <field name = "domain">[("appointment_id", "=" , active_id)]</field>
+		      <field name="context">{
+                'default_appointment_id': active_id,
+            }</field>
+		    </record>
+	</data>
+</odoo>

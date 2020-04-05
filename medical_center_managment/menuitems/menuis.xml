@@ -1,9 +1,18 @@
 <odoo>
 	<data>
-    <menuitem name="Doctors" id="medical_center_managment.doctor_menuitem" action="medical_center_managment.doctor_action_window"/>
+    <menuitem name="Doctors" id="medical_center_managment.doctor_menuitem" action="medical_center_managment.doctor_action_window"
+    web_icon = "medical_center_managment,static/src/img/menuitem/doctor.png"/>
 
-    <menuitem name="Medicals" id="medical_center_managment.medicals_menuitem" action="medical_center_managment.medicals_window_action"/>
+    <menuitem name="Medicals" id="medical_center_managment.medicals_menuitem" action="medical_center_managment.medicals_window_action"
+    web_icon = "medical_center_managment,static/src/img/menuitem/medical.png"/>
 
-    <menuitem name="Appointments" id="medical_center_managment.appointment_menu" action="medical_center_managment.doctor_appointment_window_action"/>
+    <menuitem name="Appointments" id="medical_center_managment.appointment_menu" action="medical_center_managment.doctor_appointment_window_action"
+    web_icon = "medical_center_managment,static/src/img/menuitem/appointment.png"
+    	/>
+
+
+      <menuitem name="Prescriptions" id="medical_center_managment.prescription_menu" action="medical_center_managment.prescription_window_action"
+    web_icon = "medical_center_managment,static/src/img/menuitem/prescription.png"
+    	/>
     </data>
 </odoo>
