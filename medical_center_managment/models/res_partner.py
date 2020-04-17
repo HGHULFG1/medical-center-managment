@@ -9,7 +9,7 @@ class DoctorStatus(models.Model):
 	
 class FieldStudy(models.Model):
 	_name = "field.study"
-	_description = "Doctor Speciality"
+	_description = "Field Study"
 	_order = "name, id"
 	name = fields.Char("Name", required = True, Translate = True)
 
@@ -30,7 +30,7 @@ class DoctorSpeciality(models.Model):
 class DoctorTimesheet(models.Model):
 	_name = "doctor.timesheet"
 	_description = "Doctor Timesheet"
-	name = fields.Char(required=True, compute = "_compute_name")
+	name = fields.Char( compute = "_compute_name")
 	doctor_id = fields.Many2one('res.partner')
 	dayofweek = fields.Selection([
 		('0', 'Monday'),
@@ -41,12 +41,13 @@ class DoctorTimesheet(models.Model):
 		('5', 'Saturday'),
 		('6', 'Sunday')
 		], 'Day of Week', required=True, index=True, default='0')
+
 	date_from = fields.Date(string='Start Date')
 	date_to = fields.Date(string='End Date')
 	hour_from = fields.Float(string='From',
 		help="Start and End time of working.\n"
 			 "A specific value of 24:00 is interpreted as 23:59:59.999999.")
-	hour_to = fields.Float(string='To', required=True, index=True,
+	hour_to = fields.Float(string='To', index=True,
 		help="Start and End time of working.\n"
 			 "A specific value of 24:00 is interpreted as 23:59:59.999999.")
 	day_period = fields.Selection([('morning', 'Morning'), ('afternoon', 'Afternoon')], required=True, default='morning')
@@ -58,7 +59,7 @@ class DoctorTimesheet(models.Model):
 		('line_section', "Section")], default=False, help="Technical field for UX purpose.")
 	sequence = fields.Integer(default=10,
 		help="Gives the sequence of this line when displaying the resource calendar.")
-	adress_id = fields.Many2one('res.partner', string = "Adress", required = True)
+	adress_id = fields.Many2one('res.partner', string = "Adress", required = True, domain = "[('partner_type','in',['hospital','center','clinic'])]")
 
 	def _compute_name(self):
 		for record in self :
@@ -122,10 +123,29 @@ class ResPartner(models.Model):
 	doctor_count = fields.Integer('Doctors', compute = "_compute_doctor_count")
 	medical_ids = fields.One2many("patient.medical.scheduel.scheduel", "patient_id", string = "Medicals")
 	medical_count = fields.Integer("Medicals", compute = "_compute_medical_count")
-	
 	timesheet_ids = fields.One2many("doctor.timesheet", "doctor_id", string = "Timesheet")
-	# functions 
 	
+	measurement_ids = fields.One2many('medical.patient.measure','patient_id', string = 'Measurements')
+	measurement_count = fields.Integer(compute = "_compute_measurement_count")
+	height = fields.Float("Hieght")
+	weight = fields.Float("Weight")
+	#Please add these models, Todo 
+	# job = fields.Many2one('partner.job', string = "Job")
+	# ibw = fields.Float("Ideal Body Weight", compute = "_compute_ibw", help = "Perfect body weight, depending on the calculation method you've specified in the settings")
+	# medical_assurance = fields.Many2one("medical.assurance",string = "Medical Assurance")
+	# disability_ids = fields.Many2many('disability', 'disability_partner_rel','contact_id','disability_id',string = "Disabilities")
+	# functions 
+	# Please implement me, but before create system parameter refer to tasks, Todo
+	@api.depends('gender','height')
+	def _compute_ibw(self):
+		for partner in self :
+			partner.ibw = 0
+
+	@api.depends('measurement_ids')
+	def _compute_measurement_count(self) :
+		for patient in self :
+			patient.measurement_count = len(patient.measurement_ids.ids)
+
 	@api.depends('patient_appiontment_ids')
 	def _compute_patient_appointment_count(self):
 		for record in self :

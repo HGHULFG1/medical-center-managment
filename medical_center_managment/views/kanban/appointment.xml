@@ -24,7 +24,7 @@
                                       <div class="oe_kanban_details">
                                         <br/>
                                                     <ul>
-                                                        <li>Docotr: <field name="doctor_id"/></li>
+                                                        <li>Doctor: <field name="doctor_id"/></li>
                                                     </ul>
                                                     <ul>
                                                         <li>Patient: <field name="patient_id"/></li>

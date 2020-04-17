@@ -1,0 +1,119 @@
+    
+<odoo>
+    <data>
+        <record id="speciality_1" model="doctor.speciality">
+        	<field name = "name">Dentistry (Teeth)</field>
+        </record>
+        <record id="speciality_2" model="doctor.speciality">
+        	<field name = "name">Dermatology (Skin)</field>
+        </record>
+        <record id="speciality_3" model="doctor.speciality">
+        	<field name = "name">Plastic Surgery</field>
+        </record>
+        <record id="speciality_4" model="doctor.speciality">
+        	<field name = "name">Pediatrics and New Born</field>
+        </record>
+        <record id="speciality_5" model="doctor.speciality">
+        	<field name = "name">Gastroenterology and Endoscopy</field>
+        </record>
+        <record id="speciality_6" model="doctor.speciality">
+        	<field name = "name">Neurology (Brain &amp;  Nerves)</field>
+        </record>
+        <record id="speciality_7" model="doctor.speciality">
+        	<field name = "name">Cardiology and Vascular Disease (Heart)</field>
+        </record>
+        <record id="speciality_8" model="doctor.speciality">
+        	<field name = "name">Gynaecology and Infertility</field>
+        </record>
+        <record id="speciality_9" model="doctor.speciality">
+        	<field name = "name">Allergy and Immunology (Sensitivity and Immunity)</field>
+        </record>
+        <record id="speciality_10" model="doctor.speciality">
+        	<field name = "name">Andrology and Male Infertility</field>
+        </record>
+        <record id="speciality_11" model="doctor.speciality">
+        	<field name = "name">Audiology</field>
+        </record>
+        <record id="speciality_12" model="doctor.speciality">
+        	<field name = "name">Cardiology and Thoracic Surgery (Heart &amp; Chest)</field>
+        </record>
+        <record id="speciality_13" model="doctor.speciality">
+        	<field name = "name">Chest and Respiratory</field>
+        </record>
+        <record id="speciality_14" model="doctor.speciality">
+        	<field name = "name">Diabetes and Endocrinology</field>
+        </record>
+        <record id="speciality_15" model="doctor.speciality">
+        	<field name = "name">Dietitian and Nutrition</field>
+        </record>
+        <record id="speciality_16" model="doctor.speciality">
+        	<field name = "name">Ear, Nose and Throat (ENT)</field>
+        </record>
+        <record id="speciality_16" model="doctor.speciality">
+        	<field name = "name">Emergency and Accidents Medicine (ER)</field>
+        </record>
+        <record id="speciality_16" model="doctor.speciality">
+        	<field name = "name">Family Medicine</field>
+        </record>
+        <record id="speciality_17" model="doctor.speciality">
+        	<field name = "name">General Practice</field>
+        </record>
+        <record id="speciality_18" model="doctor.speciality">
+        	<field name = "name">General Surgery</field>
+        </record>
+        <record id="speciality_19" model="doctor.speciality">
+        	<field name = "name">Geriatrics (Old People Health)</field>
+        </record>
+        <record id="speciality_20" model="doctor.speciality">
+        	<field name = "name">Hematology</field>
+        </record>
+        <record id="speciality_21" model="doctor.speciality">
+        	<field name = "name">Hepatology</field>
+        </record>
+        <record id="speciality_22" model="doctor.speciality">
+        	<field name = "name">Internal Medicine</field>
+        </record>
+        <record id="speciality_23" model="doctor.speciality">
+        	<field name = "name">IVF and Infertility</field>
+        </record>
+        <record id="speciality_24" model="doctor.speciality">
+        	<field name = "name">Nephrology</field>
+        </record>
+        <record id="speciality_25" model="doctor.speciality">
+        	<field name = "name">Obesity and Laparoscopic Surgery</field>
+        </record>
+        <record id="speciality_26" model="doctor.speciality">
+        	<field name = "name">Oncology (Tumor)</field>
+        </record>
+        <record id="speciality_27" model="doctor.speciality">
+        	<field name = "name">Ophthalmology (Eyes)</field>
+        </record>
+        <record id="speciality_28" model="doctor.speciality">
+        	<field name = "name">Pain Management</field>
+        </record>
+        <record id="speciality_29" model="doctor.speciality">
+        	<field name = "name">Pediatric Surgery</field>
+        </record>
+        <record id="speciality_30" model="doctor.speciality">
+        	<field name = "name">Phoniatrics (Speech)</field>
+        </record>
+        <record id="speciality_31" model="doctor.speciality">
+        	<field name = "name">Physiotherapy and Sport Injuries</field>
+        </record>
+        <record id="speciality_32" model="doctor.speciality">
+        	<field name = "name">Psychiatry (Psychology)</field>
+        </record>
+        <record id="speciality_33" model="doctor.speciality">
+        	<field name = "name">Psychiatry (Psychology)</field>
+        </record>
+        <record id="speciality_34" model="doctor.speciality">
+        	<field name = "name">Rheumatology</field>
+        </record>
+        <record id="speciality_35" model="doctor.speciality">
+        	<field name = "name">Urology (Urinary System)</field>
+        </record>
+        <record id="speciality_36" model="doctor.speciality">
+        	<field name = "name">Vascular Surgery (Arteries and Vein Surgery)</field>
+        </record>
+    </data>
+</odoo>

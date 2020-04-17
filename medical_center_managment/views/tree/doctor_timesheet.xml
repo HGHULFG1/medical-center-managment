@@ -8,8 +8,9 @@
             <field name = "adress_id" class="date_of_week_address" />
             <field name = "dayofweek" class="date_of_week"/>
             <field name = "day_period" class="date_of_week"/>
-      			<field name = "hour_from" class="date_of_week_time" widget= "float_time" />
-      			<field name = "hour_to" class="date_of_week_time" widget= "float_time"/>
+       
+           <field widget = "timepicker" name="hour_from"  class = "timepicker-field-center"/>
+            <field widget = "timepicker" name="hour_to" class = "timepicker-field-center"/>
       			<field name = "date_from" class="date_of_week"/>
       			<field name = "date_to" class="date_of_week"/>
         </tree>

@@ -1,14 +1,31 @@
-.o_column_sortable[data-name="dayofweek"]{width: 126px !important;
-text-align: center !important;}
-.o_column_sortable[data-name="adress_id"]{width: 260px !important;}
-.o_column_sortable[data-name="day_period"]{width: 90px !important;text-align: center !important;}
-.o_column_sortable[data-name="hour_from"]{width: 100px !important;text-align: center !important;text-align: center !important;}
-.o_column_sortable[data-name="hour_to"]{width: 100px !important;text-align: center !important;text-align: center !important;}
-.o_column_sortable[data-name="date_to"]{text-align: center !important;}
-.o_column_sortable[data-name="date_from"]{text-align: center !important;}
+.o_column_sortable[data-name="dayofweek"]{ color: white; background-color: #68465f;}
+.o_column_sortable[data-name="adress_id"]{ color: white; background-color: #68465f;}
+.o_column_sortable[data-name="day_period"]{  background-color: #68465f;color: white;}
+.o_column_sortable[data-name="date_from"]{ color: white; background-color: #68465f;}
+.o_column_sortable[data-name="date_to"]{  color: white; background-color: #68465f;}
+.o_column_sortable[data-name="hour_from"]{text-align: center !important;color: white; background-color: #68465f;}
+.o_column_sortable[data-name="hour_to"]{ text-align: center !important; color: white; background-color: #68465f;}
 
-.date_of_week{text-align: center !important;}
-.o_data_cell .o_field_cell .o_list_number .o_float_time_cell .o_required_modifie {text-align: -moz-center !important;}
+.timepicker-field-center{ text-align: center !important;padding-right: 42%;}
+.o_data_cell .o_field_cell .o_list_number .o_timepicker_cell{ text-align: center !important;}
+.blood-type{color: #68465f;font-weight: bold;padding-left: 3%; }
 
-.date_of_week_time{text-align: center !important;padding-right: 31px !important;}
 
+.o_column_sortable[data-name="min_age"]{ color: white; background-color: #68465f; width: 20% !important;text-align: center !important;}
+.o_column_sortable[data-name="max_age"]{ color: white; background-color: #68465f;width: 20% !important;text-align: center !important;}
+.o_column_sortable[data-name="min_norm_value"]{  background-color: #68465f;color: white;width: 20% !important;text-align: center !important;}
+.o_column_sortable[data-name="max_norm_value"]{ color: white; background-color: #68465f;width: 20% !important;text-align: center !important;}
+.o_column_sortable[data-name="min_danger_value"]{  color: white; background-color: #68465f;width: 20% !important;text-align: center !important;}
+.o_column_sortable[data-name="max_danger_value"]{color: white; background-color: #68465f;width: 20% !important;text-align: center !important;}
+
+.tree-field-center{text-align: center !important;border-bottom: 1px #68465f solid;}
+
+
+
+.o_kanban_view.o_kanban_dashboard.o_patient_measure_kanban {
+    &.o_kanban_ungrouped {
+        .o_kanban_record {
+            width: 450px;
+        }
+    }
+}

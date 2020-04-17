@@ -1,0 +1,15 @@
+<odoo>
+	<data>
+		    <record model="ir.actions.act_window" id="medical_center_managment.hospital_action_window">
+		      <field name="name">Hospitals</field>
+		      <field name="res_model">res.partner</field>
+		      <field name="view_mode">kanban,form</field>
+		      <field name = "domain">[("partner_type", "=" , "hospital")]</field>
+		      <field name="view_ids" eval="[(5, 0, 0),(0, 0, {'view_mode': 'tree', 'view_id': ref('medical_center_managment.doctor_list_view')}),(0, 0, {'view_mode': 'form', 'view_id': ref('medical_center_managment.view_form_res_partner')})]"/>
+		      <field name="context">{
+                'pivot_row_groupby': ['user_id'],
+                'default_partner_type': "hospital",
+            }</field>
+		    </record>
+	</data>
+</odoo>

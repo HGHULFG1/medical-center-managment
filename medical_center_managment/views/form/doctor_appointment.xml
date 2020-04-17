@@ -21,8 +21,8 @@
 
                  <sheet>
                    <div class="oe_button_box" name="button_box" groups="base.group_user">
-                            <button class="oe_stat_button" name="%(medical_center_managment.doctor_patient_action_window)d" type="action" icon="fa-file-text-o">
-                                <field string="Perscription" name="prescription_count" widget="statinfo"/>
+                            <button class="oe_stat_button" name="%(medical_center_managment.presciption_appointment)d" type="action" icon="fa-file-text-o">
+                                <field string="Perscriptions" name="prescription_count" widget="statinfo"/>
                             </button>
                         </div>
                     <widget name="web_ribbon" title="Done" attrs="{'invisible': [('state','!=','done')]}"/>

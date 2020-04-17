@@ -1,0 +1,31 @@
+<odoo>
+    <data>
+        <record id="medicine_1" model="patient.medicals">
+        	<field name = "name">ZYRTEC</field>
+        	<field name = "description">Relieves your worst allergy symptoms, indoors and out.</field>
+        </record>
+
+        <record id="medicine_2" model="patient.medicals">
+        	<field name = "name">Aspirin</field>
+        	<field name = "description">Aspirin, or acetylsalicylic acid (ASA), is commonly used as a pain reliever for minor aches and pains and to reduce fever. It is also an anti-inflammatory drug and can be used as a blood thinner.</field>
+        </record>
+
+
+        <record id="medicine_3" model="patient.medicals">
+        	<field name = "name">Augmentin</field>
+        	<field name = "description">Augmentin contains a combination of amoxicillin and clavulanate potassium. Amoxicillin is an antibiotic belonging to a group of drugs called penicillins. Amoxicillin fights bacteria in the body.
+
+			Clavulanate potassium is a beta-lactamase inhibitor that helps prevent certain bacteria from becoming resistant to amoxicillin.
+
+			Augmentin is used to treat many different infections caused by bacteria, such as sinusitis, pneumonia, ear infections, bronchitis, urinary tract infections, and infections of the skin.</field>
+        	<field name = "scientific_name"> amoxicillin and clavulanate potassium</field>
+			<field name = "titer_ids" eval="[(6,0,[ref('medical_center_managment.titer_2'),ref('medical_center_managment.titer_3'),ref('medical_center_managment.titer_4')])]"/>
+        </record>
+
+        <record id="medicine_4" model="patient.medicals">
+        	<field name = "name">Aspicot</field>
+        	<field name = "description">Aspicot is an antiplatelet drug which is used to prevent clots in blood vessels and also relieves pain and inflammation. It can be taken in combination with other antiplatelets for a better action. It is not recommended in patients with bleeding disorders. Close monitoring of platelets count is necessary.</field>
+        	<field name = "titer_ids" eval="[ref('medical_center_managment.titer_1')]"/>
+        </record>
+    </data>
+</odoo> 

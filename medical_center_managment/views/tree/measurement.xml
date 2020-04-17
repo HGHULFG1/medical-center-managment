@@ -1,0 +1,18 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="medical_center_managment.measurement_list_view">
+      <field name="name">Doctor List</field>
+      <field name="model">medical.measurements</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="notify_patient"/>
+          <field name="uom_id"/>
+        </tree>
+      </field>
+    </record>
+
+  </data>
+</odoo>

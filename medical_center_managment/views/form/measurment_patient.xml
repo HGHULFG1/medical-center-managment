@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <data>
+        <record id="medical_center_managment.patient_measurement_form_view" model="ir.ui.view">
+            <field name="model">medical.patient.measure</field>
+            <field name="arch" type="xml">
+            <form string="Measurments">
+                 <sheet>
+                     <div class="oe_title">
+                        <h1>
+                            <field name = "patient_id" />
+                        </h1>
+
+                    </div>
+                        <group>
+                            <field name="measurement_id" />
+                            <field name = "scheduel_id" />
+
+                        </group>
+
+                        <field name = "value_ids" />
+
+                    </sheet>
+            
+                 
+             </form>
+            </field>
+        </record>
+    </data>
+</odoo>
+
+                  

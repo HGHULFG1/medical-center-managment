@@ -1,3 +1,7 @@
+/* Copyright 2016 Vividlab <http://www.vividlab.de>
+ * Copyright 2017 Kaushal Prajapati <kbprajapati@live.com>
+ * Copyright 2019 Alexandre Díaz <dev@redneboa.es>
+ * License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl). */
 odoo.define('web_widget_timepicker', function (require) {
     'use strict';
 
@@ -13,7 +17,7 @@ odoo.define('web_widget_timepicker', function (require) {
 
         _onShow: function () {
             if (this.$input.val().length !== 0 && this.isValid()) {
-                var value = this.$input.val();
+                var value = this.$input.val() || 0.0;
                 this.picker.date(new moment(value, this.options.format));
                 this.$input.select();
             }
@@ -22,6 +26,9 @@ odoo.define('web_widget_timepicker', function (require) {
         setValue: function (value) {
             this.set({'value': value});
             var formatted_value = value ? this._formatClient(value) : null;
+            console.log(formatted_value);
+            console.log(value);
+            this.$input.parent().css( "text-align", "center" );
             this.$input.val(formatted_value);
             if (this.picker) {
                 var fdate = new moment(formatted_value, this.options.format);
@@ -36,11 +43,15 @@ odoo.define('web_widget_timepicker', function (require) {
         },
 
         changeDatetime: function () {
+            var self = this;
             if (this.isValid()) {
+                console.log(this.isValid)
                 var oldValue = this.getValue();
                 this._setValueFromUi();
+                console.log(oldValue);
                 var newValue = this.getValue();
-                if (oldValue && newValue && newValue !== oldValue) {
+                console.log(newValue);
+                if (oldValue && newValue) {
                     this.trigger("datetime_changed");
                 }
             }

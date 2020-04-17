@@ -1,0 +1,26 @@
+<odoo>
+    <data>
+        <record id="titer_1" model="patient.medical.titer">
+        	<field name = "name">80 MG</field>
+        	<field name = "value">80</field>
+        	<field name = "color">4</field>
+        </record>
+
+
+        <record id="titer_2" model="patient.medical.titer">
+        	<field name = "name">500-mg</field>
+        	<field name = "value">500</field>
+        	<field name = "color">6</field>
+        </record>
+        <record id="titer_3" model="patient.medical.titer">
+        	<field name = "name">250-mg</field>
+        	<field name = "value">250</field>
+        	<field name = "color">7</field>
+        </record>
+        <record id="titer_4" model="patient.medical.titer">
+        	<field name = "name">875-mg</field>
+        	<field name = "value">875</field>
+        	<field name = "color">3</field>
+        </record>
+    </data>
+</odoo>

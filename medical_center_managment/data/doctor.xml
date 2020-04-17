@@ -1,0 +1,109 @@
+<odoo>
+    <data>
+        <record id="doctor_1" model="res.partner">
+            <field name="name">Elias Fiani</field>
+            <field name="street">autoatrade Jounieh</field>
+            <field name ="city">Jounieh</field>
+            <field name = "phone">+961-3-837259 </field>
+            <field name = "mobile">+9613837259</field>
+            <field name = "partner_type">dr</field>
+            <field name="speciality_id" ref="medical_center_managment.speciality_5"/>
+        </record>
+
+
+        <record id="doctor_2" model="res.partner">
+            <field name="name">Jihad Matta</field>
+            <field name="street">Hazmieh</field>
+            <field name ="city">Baabda</field>
+            <field name = "phone">+961-3-613777</field>
+            <field name = "mobile">+9613613777</field>
+            <field name="speciality_id" ref="medical_center_managment.speciality_5"/>
+        </record>
+
+        <record id="doctor_3" model="res.partner">
+            <field name="name">Hanadi Awdeh</field>
+            <field name="street">Radouf main road</field>
+            <field name ="city">Borj Al Brajne</field>
+            <field name = "phone">+961-3-374530</field>
+            <field name = "mobile">+9613374530</field>
+            <field name = "partner_type">dr</field>
+            <field name="speciality_id" ref="medical_center_managment.speciality_1"/>
+        </record>
+
+        <record id="doctor_4" model="res.partner">
+            <field name="name">Hatem Ismail</field>
+            <field name="street">Old Saida</field>
+            <field name ="city">Chiyah</field>
+            <field name = "phone">+961-6-428280</field>
+            <field name = "partner_type">dr</field>
+            <field name="speciality_id" ref="medical_center_managment.speciality_1"/>
+        </record>
+
+
+
+        <record id="doctor_5" model="res.partner">
+            <field name="name">Zeinab Darwish</field>
+            <field name="street">Saint Therese</field>
+            <field name ="city">Hadath</field>
+            <field name = "phone">+961-3-684610</field>
+            <field name ="mobile">+9613684610</field>
+            <field name = "partner_type">dr</field>
+            <field name="speciality_id" ref="medical_center_managment.speciality_16"/>
+        </record>
+
+
+        <record id="doctor_6" model="res.partner">
+            <field name="name">Alaa Obeid</field>
+            <field name="street">Bahman Hospital street</field>
+            <field name ="city">Haret Hreik</field>
+            <field name = "phone">+961-3-230238</field>
+            <field name ="mobile">+9613230238</field>
+            <field name = "partner_type">dr</field>
+            <field name="speciality_id" ref="medical_center_managment.speciality_16"/>
+        </record>
+
+        <record id="doctor_7" model="res.partner">
+            <field name="name">Adel Dimassi</field>
+            <field name="street">Hamra area</field>
+            <field name ="city">Clemenceau</field>
+            <field name = "phone">+961-3-228147</field>
+            <field name ="mobile">+9613228147</field>
+            <field name = "partner_type">dr</field>
+            <field name="speciality_id" ref="medical_center_managment.speciality_7"/>
+        </record>
+
+
+
+        <record id="doctor_8" model="res.partner">
+            <field name="name">Nader Gharib</field>
+            <field name="street">Achrafieh</field>
+            <field name ="city">Beirut</field>
+            <field name = "phone">+961-3-684610</field>
+            <field name ="mobile">+9613684610</field>
+            <field name = "partner_type">dr</field>
+            <field name="speciality_id" ref="medical_center_managment.speciality_7"/>
+        </record>
+
+
+        <record id="doctor_9" model="res.partner">
+            <field name="name">Rana El Hindy</field>
+            <field name="street">Main road street</field>
+            <field name = "street2">ghazzeh center,facing BBAC bank</field>
+            <field name ="city">Chtoura </field>
+            <field name = "phone">+961-3-230238</field>
+            <field name ="mobile">+9613230238</field>
+            <field name = "partner_type">dr</field>
+            <field name="speciality_id" ref="medical_center_managment.speciality_15"/>
+        </record>
+
+        <record id="doctor_10" model="res.partner">
+            <field name="name">Maria Chokr</field>
+            <field name="street">Hamra area</field>
+            <field name ="city">Clemenceau</field>
+            <field name = "phone">+961-3-228147</field>
+            <field name ="mobile">+9613228147</field>
+            <field name = "partner_type">dr</field>
+            <field name="speciality_id" ref="medical_center_managment.speciality_15"/>
+        </record>
+    </data>
+</odoo>

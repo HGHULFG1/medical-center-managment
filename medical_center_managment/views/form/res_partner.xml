@@ -30,6 +30,11 @@
                             <button class="oe_stat_button" name="%(medical_center_managment.patient_appointment_action_window)d" type="action" icon="fa-plus-circle">
                                 <field string="Appointments" name="patient_appointment_count" widget="statinfo"/>
                             </button>
+
+
+                            <button class="oe_stat_button" name="%(medical_center_managment.patient_measurement_action_window)d" type="action" icon="fa-plus-circle">
+                                <field string="Measurements" name="measurement_count" widget="statinfo"/>
+                            </button>
                     </div>
                   
            
@@ -44,6 +49,7 @@
                         <field name="partner_type" widget="radio" class="oe_edit_only" options="{'horizontal': true}"/>
                         <h1>
                             <field name="name" default_focus="1" placeholder="Name" />
+                               <field name="blood_type" class ="oe_inline blood-type" placeholder = "A+" />
                         </h1>
 
                     </div>

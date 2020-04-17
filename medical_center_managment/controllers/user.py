@@ -25,6 +25,19 @@ class UserSignUp(http.Controller):
         partner_id = request.env["res.partner"].sudo().with_context(force_company = base_comapny,mail_create_nosubscribe=True).create({
             "name" : user_data_in_json["name"],
             "partner_type" : user_data_in_json["partner_type"],
+            'blood_type' : user_data_in_json["blood_type"],
+            'city' : user_data_in_json["city"],
+            'street' : user_data_in_json["street"],
+            'street2' : user_data_in_json["street2"],
+            'zip' : user_data_in_json["zip"],
+            'country_id' : user_data_in_json["country_id"],
+            'birth_date' : user_data_in_json["birth_date"],
+            'gender' : user_data_in_json["gender"],
+            'phone' : user_data_in_json["phone"],
+            'mobile' : user_data_in_json["mobile"],
+            'title' : user_data_in_json["title"],
+            'height' : user_data_in_json["height"],
+            'weight' : user_data_in_json["weight"],
             
             }).id
         users_same_login = request.env["res.users"].sudo().search([("login","=",user_data_in_json["login"])])

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <data>
+        <record id="medical_center_managment.measurement_form_view" model="ir.ui.view">
+            <field name ="name">medical.measurements.form.view</field>
+            <field name="model">medical.measurements</field>
+            <field name="arch" type="xml">
+            <form string="Medicals">
+                 <sheet>
+                     <div class="oe_title">
+                        <h2>
+                            <field name="name" default_focus="1" placeholder="Measurement Name" />
+                        </h2>
+                    </div>
+                    <field name = "active" invisible ="1" />
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+                        <group>
+                            <field name = "notify_patient" />
+                        </group>
+                        <group>
+                        <group string = "Normal Values"  >
+                            <field name = "min_norm_value" />
+                            <field name = "max_norm_value" />
+                        </group>
+                        <group string = "Danger Range">
+                            <field name = "min_danger_value" />
+                            <field name = "max_danger_value" />
+                        </group>
+                    </group>
+
+                        <group>
+                            <field name ="uom_id" />
+                        </group>
+                        <group>
+                            <field name ="age_dependent" />
+                        </group>
+
+
+                <group string = "Age Dependent Values" attrs="{'invisible':[('age_dependent','=',False)]}">
+                            <field name = "age_range_ids" nolabel="1" cellspacing="10">
+                                <tree editable = "top" >
+                                    <field name = "min_age" class ='tree-field-center'/>
+                                    <field name = "max_age" class ='tree-field-center'/>
+                                    <field name = "min_norm_value" class ='tree-field-center'/>
+                                    <field name = "max_norm_value" class ='tree-field-center'/>
+                                    <field name = "min_danger_value" class ='tree-field-center'/>
+                                    <field name = "max_danger_value" class ='tree-field-center'/>
+                                </tree>
+                            </field>
+                        </group>
+                            
+                    </sheet>
+                       <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
+
+                  

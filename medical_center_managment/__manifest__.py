@@ -97,7 +97,7 @@ then the system will add the duration in the visit form.
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','contacts','resource'],
+    'depends': ['base','mail'],
 
     # always loaded
     'data': [
@@ -107,30 +107,46 @@ then the system will add the duration in the visit form.
         'views/tree/medicals.xml',
         'views/tree/patient_medical_scheduel.xml',
         'views/kanban/medicals.xml',
-        'actions/window_actions/prescription.xml',
-        'actions/window_actions/appointments.xml',
+        'views/kanban/measurement_patient.xml',
         'actions/window_actions/doctor_patient.xml',
         'actions/window_actions/patient_doctor.xml',
         'actions/window_actions/patient_medical.xml',
+        'actions/window_actions/appointments.xml',
+        'actions/window_actions/patient_measure.xml',
+        'views/form/res_partner.xml',
+        'actions/window_actions/center.xml',
+        'actions/window_actions/patient.xml',
+        'actions/window_actions/hospital.xml',
+        'actions/window_actions/prescription.xml',
+
         'actions/window_actions/doctor_appointment.xml',
         'actions/window_actions/prescription_appointment.xml',
-        'views/form/res_partner.xml',
+        'actions/window_actions/measurement.xml',
         'views/form/medicals.xml',
         'views/form/patient_scheduel_medical.xml',
         'views/form/doctor_appointment.xml',
         'views/form/prescription.xml',
+        'views/form/measurement.xml',
+        'views/form/measurment_patient.xml',
         'views/tree/doctor_appointment.xml',
         'views/tree/doctor_timesheet.xml',
         'views/tree/prescription.xml',
+        'views/tree/measurement.xml',
         'actions/window_actions/doctor.xml',
         'actions/window_actions/medicals.xml',
         'views/kanban/appointment.xml',
         'menuitems/menuis.xml',
         'views/templates.xml',
         'views/asset.xml',
+
+        'data/speciality.xml',
+        'data/doctor.xml',
+        'data/medicine_titer.xml',
+        'data/medicine.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',
     ],
+    'qweb': ["static/src/xml/template_time_picker.xml"],
 }

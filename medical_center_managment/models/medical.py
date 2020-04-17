@@ -13,7 +13,7 @@ class Medicals(models.Model):
 	_description = "Medicals"
 	_inherit = ['mail.thread.cc', 'mail.activity.mixin']
 	name = fields.Char("Commercial Name", required = True)
-	scientific_name = fields.Char("Scientific Name", required = True)
+	scientific_name = fields.Char("Scientific Name")
 	side_effect_ids = fields.One2many("patient.medicals.side.effect", 'medical_id', string = "Side Effects")
 	disease_ids = fields.Many2many('desease', 'desease_medical_rel','desease_id','medical_id', string = "Diseases")
 	minimum_age = fields.Integer("Don't Take If Under")
@@ -21,6 +21,7 @@ class Medicals(models.Model):
 	barcode = fields.Char('Barcode')
 	code = fields.Char("Code")
 	titer_ids = fields.Many2many("patient.medical.titer", string = "Titers")
+	description = fields.Text("Description")
 
 class MedicalSideEffect(models.Model):
 	_name = "patient.medicals.side.effect"

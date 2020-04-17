@@ -5,5 +5,9 @@
             <field name="key">access_token_expires_in</field>
             <field name="value">10000000</field>
         </record>
+
+		<!-- Doctors -->
+
+
     </data>
 </odoo>

@@ -29,6 +29,9 @@
                                 </tree>
                             </field>
                         </group>
+                        <group string = "Description">
+                            <field nolabel = "1" name="description" />
+                        </group>
                     </sheet>
                        <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>

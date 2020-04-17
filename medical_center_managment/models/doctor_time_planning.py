@@ -33,7 +33,7 @@ class DoctorAppointment(models.Model):
         for record in self :
             record.prescription_count = len(record.prescription_ids.ids)
     # Planned times
-    start_date = fields.Datetime(string = "Start Date",tracking=True)
+    start_date = fields.Datetime(string = "Start Date",tracking=True, required = True)
     end_date = fields.Datetime(string = "End Date",tracking=True)
     # Effective times
     effective_start_date = fields.Datetime(string = "Effectice Start Date",tracking=True)
