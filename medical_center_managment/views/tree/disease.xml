@@ -1,0 +1,17 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="medical_center_managment.disease_list_view">
+      <field name="name">Diseases List</field>
+      <field name="model">desease</field>
+      <field name="arch" type="xml">
+        <tree decoration-danger="contagious==True">
+          <field name="name"/>
+          <field name="contagious" invisible = "1" />
+        </tree>
+      </field>
+    </record>
+
+  </data>
+</odoo>

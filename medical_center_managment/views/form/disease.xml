@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <data>
+        <record id="medical_center_managment.desease_form_view" model="ir.ui.view">
+            <field name="model">desease</field>
+            <field name="arch" type="xml">
+            <form string="Deseases">
+                 <sheet>
+                     <div class="oe_title">
+                        <h1>
+                            <field name="name" default_focus="1" placeholder="Disease Name" />
+                        </h1>
+                    </div>
+                        <group>
+                            <field name = "contagious" />
+                            <field name = "doctor_speciality_id"/>
+                        </group>
+                        <group>
+                            <field name = "level_ids" widget ="many2many_tags" />
+                        </group>
+                        <group string = "Description">
+                            <field nolabel = "1" name="description" />
+                        </group>
+                    </sheet>
+                       <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                </div>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
+
+                  

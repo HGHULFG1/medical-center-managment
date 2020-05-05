@@ -6,19 +6,25 @@
             <field name="arch" type="xml">
             <form string="Measurments">
                  <sheet>
-                     <div class="oe_title">
-                        <h1>
-                            <field name = "patient_id" />
-                        </h1>
-
-                    </div>
+  
                         <group>
-                            <field name="measurement_id" />
-                            <field name = "scheduel_id" />
+                            <field name="measurement_id" style = "width:60%" />
 
+                            <field name = "patient_id" style = "width:60%" />
+                            <field name = "scheduel_id" style = "width:60%" />
                         </group>
-
-                        <field name = "value_ids" />
+                        <group>
+                        </group>
+                        <group string = "Values">
+                            <field name = "value_ids" nolabel = "1" >
+                                <tree editable = "top" limit="15" decoration-danger="is_danger" decoration-warning = "is_warning" decoration-success = "is_warning == False and is_danger == False">
+                                    <field name = "is_danger" invisible = "1" />
+                                    <field name = "is_warning" invisible = "1" />
+                                    <field name = "measure_moment" class = "tree-field-center" />
+                                    <field name = "value" class = "tree-field-center" style = "font-weight: bold;" />
+                                </tree> 
+                            </field>
+                        </group>
 
                     </sheet>
             

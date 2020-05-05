@@ -1,0 +1,16 @@
+<odoo>
+	<data>
+		<record id="medical_center_managment.partner_map_view" model="ir.ui.view">
+					<field name="name">res.partner.view.map</field>
+			        <field name="model">res.partner</field>
+			        <field name="arch" type="xml">
+			            <map res_partner="id">
+			                <marker-popup>
+			                    <field name="name" string="Name "/>
+			                    <field name="contact_address_complete" string="Address "/>
+			                </marker-popup>
+			            </map>
+			        </field>
+		</record>
+	</data>
+</odoo>

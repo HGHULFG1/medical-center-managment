@@ -21,7 +21,7 @@
                             <field name = "disease_ids" widget = "many2many_tags" options="{'color_field': 'color'}"/>
                         </group>
                         <group string = "Side Effects">
-                            <field name = "side_effect_ids">
+                            <field name = "side_effect_ids" nolabel = "1">
                                 <tree editable = "bottom" >
                                     <field name = "disease_id" />
                                     <field name = "causing_disease_id" />

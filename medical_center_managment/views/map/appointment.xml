@@ -1,0 +1,18 @@
+<odoo>
+	<data>
+		<record id="medical_center_managment.appointment_map_view" model="ir.ui.view">
+					<field name="name">appointment.view.map</field>
+			        <field name="model">doctor.appointment</field>
+			        <field name="arch" type="xml">
+			            <map res_partner="address_id">
+			                <marker-popup>
+			                    <field name="doctor_id" string="Doctor "/>
+			                    <field name="patient_id" string="Patient "/>
+			                    <field name="address_id" string="Address "/>
+			                    
+			                </marker-popup>
+			            </map>
+			        </field>
+		</record>
+	</data>
+</odoo>

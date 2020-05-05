@@ -1,6 +1,12 @@
 from odoo import api, fields, models, _
 import json
+from matplotlib.patches import Rectangle
+import datetime
 import matplotlib.pyplot as plt, mpld3
+from matplotlib.dates import (YEARLY, DateFormatter,
+                              rrulewrapper, RRuleLocator, drange)
+import matplotlib.dates as mdates
+from matplotlib import cm
 class MedicalExamination(models.Model):
     _name = "medical.examination"
     _description = "Medical Examination"
@@ -21,10 +27,10 @@ class MedicalMeasure(models.Model):
     _description = "Medical Measurements"
     active = fields.Boolean(default = True)
     name = fields.Char('Name', required = True, translate = True)
-    min_norm_value = fields.Char('Min. Normal')
-    max_norm_value = fields.Char('Max. Normal')
-    min_danger_value = fields.Char('Min. Danger')
-    max_danger_value = fields.Char('Max. Danger')
+    min_norm_value = fields.Float('Min. Normal')
+    max_norm_value = fields.Float('Max. Normal')
+    min_danger_value = fields.Float('Min. Danger')
+    max_danger_value = fields.Float('Max. Danger')
     age_dependent = fields.Boolean('Age Dependent')
     notify_patient = fields.Boolean('Notify Patient')
     age_range_ids = fields.One2many('medical.measure.age','medical_measurement_id',string='Age Ranges')
@@ -36,10 +42,10 @@ class MedicalMeasureAge(models.Model):
     min_age = fields.Integer("From Age")
     max_age = fields.Integer("To Age")
 
-    min_norm_value = fields.Char('Min')
-    max_norm_value = fields.Char('Max')
-    min_danger_value = fields.Char('Danger Min')
-    max_danger_value = fields.Char('Danger Max')
+    min_norm_value = fields.Float('Min')
+    max_norm_value = fields.Float('Max')
+    min_danger_value = fields.Float('Danger Min')
+    max_danger_value = fields.Float('Danger Max')
     medical_measurement_id = fields.Many2one("medical.measurements", string = "Medical Measurement")
 
 class MedicalMeasurePatient(models.Model):
@@ -50,15 +56,80 @@ class MedicalMeasurePatient(models.Model):
     value_ids = fields.One2many("patient.measure.value",'measure_id', string = "Values")
     graph_data = fields.Text(compute = "_compute_graph_data")
     mpld3_chart = fields.Text(string='Mpld3 Chart',compute='_compute_mpld3_chart')
+    def action_new_value(self):
+
+        return {
+            'name': _('Add New Value'),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'patient.measure.value',
+            'target' : 'new',
+            'context' : {
+            'default_measure_id': self.id,
+            'default_measure_moment': datetime.datetime.now(),
+
+            }
+        }
+
+    def action_view_measurement(self):
+        self.ensure_one()
+        action = self.env.ref('medical_center_managment.patient_measurement_action_window').read()[0]
+
+        action['context'] = {'default_active_id': self.id}
+        action['views'] =  [(False, 'form')]
+        action['res_id'] =  self.id
+        return action
+
+
+    def name_get(self):
+        result = []
+        for measure in self:
+            name = measure.measurement_id.name + _(' For ') + measure.patient_id.name
+            result.append((measure.id, name))
+        return result
     def _compute_mpld3_chart(self):
         for rec in self:
-            # Design your mpld3 figure:
-            plt.scatter([1, 10], [5, 9])
-            figure = plt.figure()
-            plt.plot([1, 2, 3, 4], [1, 4, 9, 16],'r',label = 'Line1')
-            plt.plot([1, 2, 3, 4], [1, 7, 11, 9],'b--',label = 'Line1')
-            t = plt.xlabel('my data', fontsize=14, color='red')
-            plt.ylabel('some numbers')
+            dates = []
+            values = []
+
+            dates_warning = []
+            values_warning = []
+
+            dates_danger = []
+            values_danger = []
+
+            dates_norm = []
+            values_norm = []
+
+            for value in rec.value_ids :
+                    if value.is_warning : 
+                        dates_warning.append(value.measure_moment)
+                        values_warning.append(value.value)
+                        dates.append(value.measure_moment)
+                        values.append(value.value)
+                    if value.is_danger : 
+                        dates_danger.append(value.measure_moment)
+                        values_danger.append(value.value)
+                        dates.append(value.measure_moment)
+                        values.append(value.value)                    
+                    if not value.is_warning and not  value.is_danger : 
+                        dates.append(value.measure_moment)
+                        values.append(value.value)
+                        dates_norm.append(value.measure_moment)
+                        values_norm.append(value.value)                                               
+
+            figure = plt.figure(figsize = (10,3))
+            plt.plot_date(dates_norm,values_norm, color = 'green')
+            plt.plot_date(dates_danger,values_danger, color = 'red')
+            plt.plot_date(dates_warning,values_warning, color = 'yellow')
+            plt.plot(dates,values, 'b--')
+            # plt.plot(dates,[rec.measurement_id.min_norm_value]*len(dates),'y--',label = 'Min. Normal Value')
+            # plt.plot(dates,[rec.measurement_id.max_norm_value]*len(dates),'y--',label = 'Max. Normal Value')
+            # plt.plot(dates,[rec.measurement_id.max_danger_value]*len(dates),'r--',label = 'Max. Danger Value')
+            # plt.plot(dates,[rec.measurement_id.min_danger_value]*len(dates),'r--',label = 'Min. Danger Value')
+            # plt.plot([1, 2, 3, 4], [1, 4, 9, 16],'r',label = 'Line1')
+            # plt.plot([1, 2, 3, 4], [1, 7, 11, 9],'b--',label = 'Line1')
+            plt.ylabel(rec.measurement_id.name)
             plt.legend()
 
             rec.mpld3_chart = mpld3.fig_to_html(figure)
@@ -101,6 +172,16 @@ class MedicalMeasurePatient(models.Model):
             '''
 class MedicalMeasurePatientValue(models.Model):
     _name = "patient.measure.value"
+    _order = 'measure_moment desc'
     measure_id = fields.Many2one("medical.patient.measure", strnig = "Medical Measurements")
     measure_moment = fields.Datetime(string = "Moment")
     value = fields.Float("Value")
+    is_danger = fields.Boolean(compute = "_compute_state")
+    is_warning = fields.Boolean(compute = "_compute_state")
+    @api.depends('value')
+    def _compute_state(self):
+        for rec in self :
+            measurement = rec.measure_id.measurement_id
+            if not measurement.age_dependent :
+                rec.is_danger = (rec.value < measurement.min_danger_value or rec.value > measurement.max_danger_value)
+                rec.is_warning = (rec.value < measurement.min_norm_value or rec.value > measurement.max_norm_value) and not rec.is_danger

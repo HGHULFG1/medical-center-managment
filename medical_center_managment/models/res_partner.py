@@ -89,15 +89,24 @@ class DeseasseLevelPartner(models.Model) :
 class Desease(models.Model):
 	_name = "desease"
 	_description = "Desease"
+	_inherit = ['mail.thread.cc', 'mail.activity.mixin']
 	name = fields.Char("Name", required = True, Translate = True)
 	level_ids = fields.Many2many('desease.level', 'desease_deasease_level_rel', string = 'Levels')
 	doctor_speciality_id = fields.Many2one("doctor.speciality", string = "Doctor Speciality", help = "What speciality shoulf a doctor have to deal with this desease")
 	color = fields.Integer('Color Index')
+	contagious = fields.Boolean("Contagious?")
+	description = fields.Text("Description")
+
+class MedicalAssurance(models.Model):
+	_name = "medical.assurance"
+	_description = "Medical Assurance"
+	name = fields.Char("Name", required = True, translate = True)
+	active = fields.Boolean(default = True)
 
 class ResPartner(models.Model):
 	_inherit = "res.partner"
 	same_name = fields.Boolean(default=False, compute = "_compute_same_name")
-	partner_type = fields.Selection([("dr","Doctor"),("patient","Patient"),("hospital","Hospital"),("center","Medical Center"),("clinic","Clinic")], string = "Type")
+	partner_type = fields.Selection([("dr","Doctor"),("patient","Patient"),("hospital","Hospital"),("center","Medical Center"),("clinic","Clinic"),('insurance',"Insurance")], string = "Type")
 	gender = fields.Selection([("male","Male"),("female","Female")])
 	status = fields.Many2one("doctor.status", string = "Status")
 	study_field_id = fields.Many2one("field.study", string = "Study Field")
@@ -111,12 +120,15 @@ class ResPartner(models.Model):
 	clinic_ids = fields.One2many("res.partner", "dr_id" ,string = "Clinics", domain = "[('partner_type','=','clinic')]")
 	hospital_ids = fields.Many2many("res.partner","doctor_hospital_rel", "doctor_id","hospital_id",  string = "Hospitals", domain = "[('partner_type','=','hospital')]")
 	blood_type = fields.Selection([("a+","A+"),("a-","A-"),("b+","B+"),("b-","B-"),("o+","O+"),("o-","O-"),("ab+","AB+"),("ab-","AB-")], string = "Blood Type")
+	date_last_donation = fields.Date("Last Donation Date")
+
 	#doctor fields
 	emergency_phone = fields.Char("Emergency Phone")
 	patient_count = fields.Integer("Patients", compute = "_compute_patient_count")
 	doctor_appiontment_ids = fields.One2many('doctor.appointment','doctor_id', string = "Appointments")
 	doctor_appointment_count = fields.Integer('Appointments', compute = "_compute_doctor_appointment")
 	# Patient fields
+	contagious_disease = fields.Boolean("Contagious Diseases", compute="_compute_contagious")
 	patient_appiontment_ids = fields.One2many('doctor.appointment','patient_id', string = "Appointments")
 	patient_appointment_count = fields.Integer('Appointments', compute = "_compute_patient_appointment_count")
 	disease_ids = fields.One2many('desease.level.doctor.partner','partner_id',string = "Deseases")
@@ -124,22 +136,49 @@ class ResPartner(models.Model):
 	medical_ids = fields.One2many("patient.medical.scheduel.scheduel", "patient_id", string = "Medicals")
 	medical_count = fields.Integer("Medicals", compute = "_compute_medical_count")
 	timesheet_ids = fields.One2many("doctor.timesheet", "doctor_id", string = "Timesheet")
-	
+	smoker = fields.Boolean("Smoker")
+	drinker = fields.Boolean("Drinker")
 	measurement_ids = fields.One2many('medical.patient.measure','patient_id', string = 'Measurements')
 	measurement_count = fields.Integer(compute = "_compute_measurement_count")
-	height = fields.Float("Hieght")
-	weight = fields.Float("Weight")
+	height = fields.Float("Hieght (cm)")
+	weight = fields.Float("Weight (kg)")
 	#Please add these models, Todo 
 	# job = fields.Many2one('partner.job', string = "Job")
-	# ibw = fields.Float("Ideal Body Weight", compute = "_compute_ibw", help = "Perfect body weight, depending on the calculation method you've specified in the settings")
-	# medical_assurance = fields.Many2one("medical.assurance",string = "Medical Assurance")
+	ibw = fields.Float("Ideal Body Weight", compute = "_compute_ibw", help = "Perfect body weight, depending on the calculation method you've specified in the settings")
+	abw = fields.Float("Adjusted Body Weight", compute = "_compute_abw", help = "Perfect body weight, depending on the calculation method you've specified in the settings")
+	# ABW = IBW + 0.4(actual weight - IBW)
+	medical_assurance_id = fields.Many2one("res.partner",string = "Health Insurance", domain = "[('partner_type','=','insurance')]")
 	# disability_ids = fields.Many2many('disability', 'disability_partner_rel','contact_id','disability_id',string = "Disabilities")
 	# functions 
 	# Please implement me, but before create system parameter refer to tasks, Todo
+	@api.depends('disease_ids')
+	def _compute_contagious(self) :
+		for patient in self :
+			contagious = False
+			for disease in patient.disease_ids :
+				if disease.contagious :
+					contagious = True
+			patient.contagious_disease = contagious
+
 	@api.depends('gender','height')
 	def _compute_ibw(self):
+		gender_switcher = {'male':50,'female':45.5}
 		for partner in self :
-			partner.ibw = 0
+			if partner.gender and partner.partner_type == 'patient' :
+				partner.ibw = (partner.height/30.48 - 5)*2.3*12 + gender_switcher.get(partner.gender)
+			else :
+				partner.ibw = 0.0
+
+	@api.depends('ibw')
+	def _compute_abw(self):
+		for partner in self :
+
+			if partner.weight > 1.3 * partner.ibw and  partner.gender and partner.partner_type == 'patient':
+				partner.abw = partner.ibw + 0.4 * (partner.weight - partner.ibw)
+
+			else :
+				partner.abw = 0.0
+
 
 	@api.depends('measurement_ids')
 	def _compute_measurement_count(self) :

@@ -1,0 +1,56 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="medical_center_managment.doctor_list_view">
+      <field name="name">Doctor List</field>
+      <field name="model">res.partner</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="partner_type" invisible = "1" />
+          <field name="speciality_id" attrs = "{'invisible' : [('partner_type', '!=','dr')]}"/>
+          <field name="emergency_phone"/>
+          <field name="years_of_experience" attrs = "{'invisible' : [('partner_type', '!=','dr')]}"/>
+          <field name="category_id" widget = "many2many_tags" />
+        </tree>
+      </field>
+    </record>
+
+
+  <record model="ir.ui.view" id="medical_center_managment.patient_list_view">
+      <field name="name">Patient List</field>
+      <field name="model">res.partner</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="partner_type" invisible = "1" />
+          <field name="city"/>
+          <field name="medical_assurance_id"/>
+          <field name="blood_type"/>
+          <field name="date_last_donation"/>
+          <field name="category_id" widget = "many2many_tags" />
+        </tree>
+      </field>
+    </record>
+
+
+  <record model="ir.ui.view" id="medical_center_managment.hospital_list_view">
+      <field name="name">Hospital Centers and Clinics List</field>
+      <field name="model">res.partner</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="partner_type" invisible = "1" />
+          <field name="city"/>
+          <field name="phone"/>
+          <field name="category_id" widget = "many2many_tags" />
+        </tree>
+      </field>
+    </record>
+
+
+
+
+  </data>
+</odoo>
