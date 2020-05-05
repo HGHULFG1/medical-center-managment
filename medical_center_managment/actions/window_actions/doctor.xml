@@ -3,7 +3,7 @@
 		    <record model="ir.actions.act_window" id="medical_center_managment.doctor_action_window">
 		      <field name="name">Doctors</field>
 		      <field name="res_model">res.partner</field>
-		      <field name="view_mode">kanban,form</field>
+		      <field name="view_mode">kanban,form,map</field>
 		      <field name = "domain">[("partner_type", "=" , "dr")]</field>
 		      <field name="view_ids" eval="[(5, 0, 0),(0, 0, {'view_mode': 'tree', 'view_id': ref('medical_center_managment.doctor_list_view')}),(0, 0, {'view_mode': 'form', 'view_id': ref('medical_center_managment.view_form_res_partner')})]"/>
 		      <field name="context">{

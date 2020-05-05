@@ -16,8 +16,19 @@
     web_icon = "medical_center_managment,static/src/img/menuitem/center.png"/>
 
 
+    <menuitem name="Configuration" id="medical_center_managment.disease_configuration_menuitem"
+    parent = 'medical_center_managment.patient_menuitem' 
+   />
+    <menuitem name="Disease" id="medical_center_managment.disease_menuitem" action="medical_center_managment.disease_action_window" sequence = "2"
+    parent = 'medical_center_managment.disease_configuration_menuitem' 
+   />
 
-    <menuitem name="Medicals" id="medical_center_managment.medicals_menuitem" action="medical_center_managment.medicals_window_action" sequence = "6"
+    <menuitem name="Health Insurance" id="medical_center_managment.health_insurance_menuitem" action="medical_center_managment.assurance_action_window" sequence = "2"
+    parent = 'medical_center_managment.disease_configuration_menuitem' 
+   />
+
+
+    <menuitem name="Medications" id="medical_center_managment.medicals_menuitem" action="medical_center_managment.medicals_window_action" sequence = "6"
     web_icon = "medical_center_managment,static/src/img/menuitem/medical.png"/>
 
     <menuitem name="Appointments" id="medical_center_managment.appointment_menu" action="medical_center_managment.doctor_appointment_window_action" sequence = "3"

@@ -8,7 +8,7 @@
 
 .timepicker-field-center{ text-align: center !important;padding-right: 42%;}
 .o_data_cell .o_field_cell .o_list_number .o_timepicker_cell{ text-align: center !important;}
-.blood-type{color: #68465f;font-weight: bold;padding-left: 3%; }
+.blood-type{color: #68465f;font-weight: bold}
 
 
 .o_column_sortable[data-name="min_age"]{ color: white; background-color: #68465f; width: 20% !important;text-align: center !important;}
@@ -18,9 +18,18 @@
 .o_column_sortable[data-name="min_danger_value"]{  color: white; background-color: #68465f;width: 20% !important;text-align: center !important;}
 .o_column_sortable[data-name="max_danger_value"]{color: white; background-color: #68465f;width: 20% !important;text-align: center !important;}
 
-.tree-field-center{text-align: center !important;border-bottom: 1px #68465f solid;}
+
+.o_column_sortable[data-name="value"]{ color: white; background-color: #68465f;text-align: center !important;}
+.o_column_sortable[data-name="measure_moment"]{ color: white; background-color: #68465f; text-align: center !important;}
 
 
+
+.tree-field-center{font-weight: bold;text-align: center !important;border-bottom: 1px #68465f solid;}
+.anormal-value{color : yellow;}
+.mpld3-figure
+{
+	width : 100%;
+}
 
 .o_kanban_view.o_kanban_dashboard.o_patient_measure_kanban {
     &.o_kanban_ungrouped {

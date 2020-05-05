@@ -3,7 +3,7 @@
 		    <record model="ir.actions.act_window" id="medical_center_managment.patient_measurement_action_window">
 		      <field name="name">Measurements</field>
 		      <field name="res_model">medical.patient.measure</field>
-		      <field name="view_mode">kanban,form,graph</field>
+		      <field name="view_mode">kanban,form,tree</field>
 		      <field name="context">{
                 'default_patient_id': active_id,
             }</field>

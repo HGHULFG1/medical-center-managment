@@ -1,0 +1,9 @@
+<odoo>
+	<data>
+		    <record model="ir.actions.act_window" id="medical_center_managment.disease_action_window">
+		      <field name="name">Diseases</field>
+		      <field name="res_model">desease</field>
+		      <field name="view_mode">kanban,list,form</field>
+		    </record>
+	</data>
+</odoo>
