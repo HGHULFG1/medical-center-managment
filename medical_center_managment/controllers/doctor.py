@@ -5,11 +5,6 @@ import json
 
 import werkzeug.wrappers
 from odoo import http
-from odoo.addons.restful.common import (
-    extract_arguments,
-    invalid_response,
-    valid_response,
-)
 from odoo.http import request
 import datetime
 import yaml

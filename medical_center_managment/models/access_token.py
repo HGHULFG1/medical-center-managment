@@ -7,7 +7,7 @@ from odoo import api, fields, models, tools, SUPERUSER_ID, _
 from odoo.http import request
 _logger = logging.getLogger(__name__)
 
-expires_in = "restful.access_token_expires_in"
+expires_in = "medical_center_managment.access_token_expires_in"
 
 
 def nonce(length=40, prefix="access_token"):
