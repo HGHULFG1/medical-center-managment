@@ -2,6 +2,7 @@ from odoo import api, fields, models, _
 import json
 from matplotlib.patches import Rectangle
 import datetime
+import matplotlib 
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt, mpld3
 from matplotlib.dates import (YEARLY, DateFormatter,
