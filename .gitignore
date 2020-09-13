@@ -1,1 +1,17 @@
 *.pyc
+*.cpython-36.pyc
+medical_center_managment/models/__pycache__/__init__.cpython-36.pyc
+medical_center_managment/models/__pycache__/access_token.cpython-36.pyc
+medical_center_managment/models/__pycache__/doctor_prescription.cpython-36.pyc
+medical_center_managment/models/__pycache__/doctor_time_planning.cpython-36.pyc
+medical_center_managment/models/__pycache__/image_count.cpython-36.pyc
+medical_center_managment/models/__pycache__/ir_default.cpython-36.pyc
+medical_center_managment/models/__pycache__/medical_measurements.cpython-36.pyc
+medical_center_managment/models/__pycache__/medical.cpython-36.pyc
+medical_center_managment/models/__pycache__/res_partner.cpython-36.pyc
+medical_center_managment/__pycache__/__init__.cpython-36.pyc
+medical_center_managment/__pycache__/__init__.cpython-36.pyc
+medical_center_managment/controllers/__pycache__/__init__.cpython-36.pyc
+medical_center_managment/controllers/__pycache__/doctor.cpython-36.pyc
+medical_center_managment/controllers/__pycache__/token.cpython-36.pyc
+medical_center_managment/controllers/__pycache__/user.cpython-36.pyc
