@@ -1,5 +1,11 @@
-from odoo import models, fields, api
-
+from odoo import models, fields, api, _
+import pytz
+import datetime
+from math import modf
+import logging
+from odoo.addons.medical_center_managment.models.exceptions.custom_exceptions import InvalidMeeting
+from pytz import timezone
+_logger = logging.getLogger(__name__)
 
 class DoctorStatus(models.Model):
 	_name = "doctor.status"
@@ -70,8 +76,6 @@ class DeseaseLevel(models.Model):
 	name = fields.Char("Name", required = True, Translate = True)
 	checking_period_days = fields.Integer('Check With Patient Every')
 	critical = fields.Boolean('Critical')
-
-
 class DeseasseLevelPartner(models.Model) :
 	_name = "desease.level.doctor.partner"
 	partner_id = fields.Many2one('res.partner', string = 'Patient', required = True, domain = "[('partner_type','=','dr')]")
@@ -85,7 +89,6 @@ class DeseasseLevelPartner(models.Model) :
 	def _onchange_desease(self):
 		lst = self.desease_id.level_ids.ids
 		return {'domain': {'level_id': [('id', 'in', lst)]}}
-
 class Desease(models.Model):
 	_name = "desease"
 	_description = "Desease"
@@ -96,13 +99,11 @@ class Desease(models.Model):
 	color = fields.Integer('Color Index')
 	contagious = fields.Boolean("Contagious?")
 	description = fields.Text("Description")
-
 class MedicalAssurance(models.Model):
 	_name = "medical.assurance"
 	_description = "Medical Assurance"
 	name = fields.Char("Name", required = True, translate = True)
 	active = fields.Boolean(default = True)
-
 class ResPartner(models.Model):
 	_inherit = "res.partner"
 	same_name = fields.Boolean(default=False, compute = "_compute_same_name")
@@ -230,6 +231,168 @@ class ResPartner(models.Model):
 				record.doctor_count = 0
 			else : 
 				record.doctor_count = len(record.disease_ids.ids)
+	def _validate_meeting(self, datetime_start, datetime_end, adress, meeting):
+		concurrent_meetings = self._compute_concurrency(datetime_start, datetime_end, adress)		
+		if concurrent_meetings:
+			availibilities = self._get_doctor_available_times(datetime_start.date(),datetime.time(hour=0, minute=0),datetime.time(hour=23, minute=59),[adress])
+			raise InvalidMeeting(doctor=self,type="another_meeting", meeting=concurrent_meetings[0],valid_times=availibilities)
+			# except InvalidMeeting as e:
+			# 	_logger.warning("dsd")
+				# return {'warning': {'title': _('Invalid Meeting'), 'message': e.message}, 'success':False}
+		else:
+			return {'success': True}
+			
+	
+	@api.model
+	def _get_available_times(self, doctor_id, date, time_start, time_end, adress):
+		return self.env["res.partner"].sudo().browse(doctor_id)._compute_concurrency(date, time_start, time_end, [adress])
+	#todo test _get_doctor_available_times
+	def _get_doctor_available_times(self, date, time_start, time_end, addresses):
+		availability = []
+		for adress in addresses:
+			timesheet = self._compute_current_timesheet(date, time_start, time_end, adress)
+			if not timesheet:
+				availability.append(
+					{
+						"address": adress.name,
+						"availibility": {"name":f"The doctor {self.name} is not available in {adress.name}", "state":"not_available"},
+						"date": date,
+						"start_time": str(time_start),
+						"end_time" : str(time_end)
+
+					}
+				)
+				continue
+			else:
+				from_datetime = datetime.datetime.combine(date,time_start)
+				to_datetime = datetime.datetime.combine(date,time_end)
+				meetings = self._compute_concurrency(from_datetime, to_datetime, adress)
+				start_time = datetime.time(hour=int(timesheet.hour_from), minute= int(modf(timesheet.hour_from)[0]*60))
+				end_time = datetime.time(hour=int(timesheet.hour_to), minute= int(modf(timesheet.hour_to)[0]*60))
+				current_time = start_time
+				if not meetings:
+					availability.append(
+						{
+						"address": adress.name,
+						"availibility": {"name":f"The doctor {self.name} is available in {adress.name} from {start_time} till {end_time}","state":"available"},
+						"date": date,
+						"start_time": str(time_start),
+						"end_time" : str(time_end)
+						}
+					)
+					continue
+				availability_details = []
+				for index, meeting in enumerate(meetings):
+					tz = timezone(self.env.user.tz)
+					start_date_meeting = pytz.utc.localize(meeting.start_date).astimezone(tz)
+					end_date_meeting = pytz.utc.localize(meeting.end_date).astimezone(tz)
+					if start_date_meeting.time() > current_time:
+						availability.append(
+							{
+							"address": adress.name,
+							"availibility": {"name":f"The doctor {self.name} is available in {adress.name} from {current_time} till {start_date_meeting.time()}","state":"available"},
+							"date": date,
+							"start_time": str(current_time),
+							"end_time" : str(start_date_meeting.time())
+							}
+						)
+						availability.append(
+							{
+							"address": adress.name,
+							"availibility": {"name":f"The doctor {self.name} is not available in {adress.name} from {current_time} till {end_date_meeting.time()}","state":"not_available"},
+							"date": date,
+							"start_time": str(start_date_meeting.time()),
+							"end_time" : str(end_date_meeting.time())
+							}
+						)
+						current_time = end_date_meeting.time()
+
+					if start_date_meeting.time() == current_time:
+						availability.append(
+							{
+							"address": adress.name,
+							"availibility": {"name":f"The doctor {self.name} is not available in {adress.name} from {current_time} till {end_date_meeting.time()}","state":"not_available"},
+							"date": date,
+							"start_time": str(start_date_meeting.time()),
+							"end_time" : str(end_date_meeting.time())
+							}
+						)
+						current_time = end_date_meeting.time()
+
+					if start_date_meeting.time() < current_time and end_date_meeting.time() > current_time:
+						availability.append(
+							{
+							"address": adress.name,
+							"availibility": {"name":f"The doctor {self.name} is not available in {adress.name} from {current_time} till {end_date_meeting.time()}","state":"not_available"},
+							"date": date,
+							"start_time": str(current_time),
+							"end_time" : str(end_date_meeting.time())
+							}
+						)
+						current_time = end_date_meeting.time()
+				if current_time < end_time:
+						availability.append(
+							{
+							"address": adress.name,
+							"availibility": {"name":f"The doctor {self.name} is available in {current_time} from {end_time} till {end_date_meeting.time()}","state":"available"},
+							"date": date,
+							"start_time": str(current_time),
+							"end_time" : str(end_time)
+							}
+						)
+				return availability
+	#todo test _compute_concurrency
+	def _compute_concurrency(self, from_datetime, to_datetime, addresse):
+		# appoints_ids = self
+		appointment_ids = self.with_context(tz=self.env.user.tz, lang=self.env.user.lang).doctor_appiontment_ids
+		concurrent_meetings = list(filter(lambda meeting:
+		meeting.state == 'approved'
+		and
+		meeting.start_date >= from_datetime
+		and
+		meeting.start_date <= to_datetime
+		and
+		meeting.address_id.id == addresse.id,
+		appointment_ids
+		))
+		return sorted(concurrent_meetings, key=lambda x: x.start_date, reverse=True)
+
+
+	def _compute_current_timesheet(self, date, time_form, time_to, address):
+		'''this function compute the timesheet that should be used in order to validate a meeting
+		the retrun value is an object of type 'doctor.timesheet' or False
+		'''
+		timesheet_ids = self.with_context(tz=self.env.user.tz, lang=self.env.user.lang).timesheet_ids
+		weekday = date.weekday()
+		current_timesheet = False
+		current_date_from = datetime.datetime.min
+
+
+		# start_datetime = datetime.datetime.combine(start_date, start_time)
+		valid_timesheets = list(
+		filter(lambda time: time.dayofweek == str(weekday)
+		and
+		not time.date_from or (time.date_from and time.date_from >= date)
+		and
+		not time.date_to or (time.date_to and time.date_to <= date)
+		and
+		datetime.time(hour=int(time.hour_from), minute=int(modf(time.hour_from)[0] * 60)) >= time_form
+		and
+		datetime.time(hour=int(time.hour_to), minute=int(modf(time.hour_to)[0] * 60)) <= time_to
+		and
+		time.adress_id == address.id,
+		timesheet_ids
+		))
+		if not valid_timesheets:
+			return False
+		# No we will check if there is an exception for the date
+		for valid_time in valid_timesheets:
+			if valid_time.date_from:
+				if valid_time.date_from > current_date_from:
+					current_date_from = valid_time.date_from
+					current_timesheet = valid_time
+		
+		return current_timesheet or valid_timesheets[0]
 
 	# To do add write method to res.partner 
 	# def write(self, vals):

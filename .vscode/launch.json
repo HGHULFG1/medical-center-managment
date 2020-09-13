@@ -1,0 +1,25 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Odoo",
+            "type": "python",
+            "request": "launch",
+            "program": "/odoo/odoo-server/odoo-bin",
+            "args": [
+                "--addons-path=/odoo/odoo-server/addons,/odoo/odoo-server/enterprise-13.0,/odoo/custom/addons/medical-center-managment",
+                "-d medical_center_managment"
+            ],
+            "env": {},
+            
+            
+        }
+
+        
+            
+    ]
+    
+}

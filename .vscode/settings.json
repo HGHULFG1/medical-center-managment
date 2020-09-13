@@ -1,0 +1,22 @@
+{
+    "python.linting.pylintEnabled": true,
+    "python.pythonPath": "odoo/odoo-server",
+    "python.autoComplete.extraPaths": [
+        "/odoo/odoo-server",
+        "/odoo",
+        "/home/hassan/bmb",
+        "/odoo/odoo-server/addons",
+        "/usr/lib/python3/dist-packages/odoo/addons",
+    ],
+    "python.formatting.provider": "yapf",
+    "workbench.colorCustomizations":{
+        "tab.activeBackground": "#918181",
+        "activityBar.activeBackground": "#34393a",
+        "activityBar.border": "#f8f5f5",
+        "symbolIcon.folderColor": "#ff0000",
+        "symbolIcon.folderForeground": "#ff0000",
+        
+        
+    },
+    "vsicons.presets.nestjs": true,
+}

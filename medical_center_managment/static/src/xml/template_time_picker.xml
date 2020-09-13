@@ -1,11 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template
+        id="assets_backend"
+        name="erroe_message assets"
+        inherit_id="web.assets_backend"
+    >
+        <xpath expr="." position="inside">
+            <script
+                type="text/javascript"
+                src="/medical_center_managment/static/src/js/invalid_meeting.js"
+            />
 
-<templates>
- 
-
- <t t-name="Timepicker">
- 	<div>
-</div>
-    </t>
-
-</templates>
+        </xpath>
+    </template>
+</odoo>

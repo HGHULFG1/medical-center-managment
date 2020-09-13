@@ -9,7 +9,6 @@ _logger = logging.getLogger(__name__)
 
 expires_in = "medical_center_managment.access_token_expires_in"
 
-
 def nonce(length=40, prefix="access_token"):
     rbytes = os.urandom(length)
     return "{}_{}".format(prefix, str(hashlib.sha1(rbytes).hexdigest()))

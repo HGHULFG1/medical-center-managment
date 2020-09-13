@@ -11,7 +11,7 @@ from pytz import timezone, utc
 
 from odoo import api, fields, models, _
 from odoo.addons.base.models.res_partner import _tz_get
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 from odoo.osv import expression
 from odoo.tools.float_utils import float_round
 
@@ -42,6 +42,16 @@ class DoctorAppointment(models.Model):
     state = fields.Selection([("draft","To Approve"),("approved","Approved"),("confirm","Confirmed"),("progress","In Progress"),("done","Done"),("cancel","Canceled")], default = 'draft')
     description = fields.Text("Description")
     
+
+    def constrains_doctor_timesheet(self):
+        """
+        This function will prevent creation of an appointment where the doctor is 
+        not available in the specified address.
+        """
+        timesheets = self.doctor_id.timesheet_ids
+        # valid_timesheets = list(filter(lambda time: time.address_id = self.address_id and ))
+
+
     def name_get(self):
         result = []
         for appointment in self:
@@ -54,10 +64,17 @@ class DoctorAppointment(models.Model):
             result.append((appointment.id, name))
         return result
 
+    @api.onchange('state')
+    @api.depends_context('meeting_error')
+    def _onchange_state(self, error = False):
+        pass
 
 
     def approve(self):
-        self.state = 'approved'
+        valid = self.doctor_id._validate_meeting(self.start_date, self.end_date, self.address_id, self)
+        if valid['success']:
+            self.state = 'approved'
+
     def confirm(self):
         self.state = 'confirm'
     def cancel(self):
