@@ -3,7 +3,6 @@ from odoo import _
 import logging
 from inspect import currentframe
 from odoo.tools.func import frame_codeinfo
-import js2py
 from odoo.exceptions import UserError
 import datetime
 _logger = logging.getLogger(__name__)
