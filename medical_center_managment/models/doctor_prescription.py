@@ -33,3 +33,6 @@ class Medicals(models.Model):
 				medical[2]['doctor_id'] = vals['doctor_id']
 				medical[2]['patient_id'] = vals['patient_id']
 		return super(Medicals, self).create(vals)
+
+
+# todo add warnings and custom exceptions

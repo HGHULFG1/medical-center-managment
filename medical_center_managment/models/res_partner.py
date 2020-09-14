@@ -266,7 +266,7 @@ class ResPartner(models.Model):
 			else:
 				from_datetime = datetime.datetime.combine(date,time_start)
 				to_datetime = datetime.datetime.combine(date,time_end)
-				meetings = self._compute_concurrency(from_datetime, to_datetime, adress)
+				meetings = self._compute_concurrency(from_datetime.replace(hour=0, minute=0), to_datetime.replace(hour=23, minute=59), adress)
 				start_time = datetime.time(hour=int(timesheet.hour_from), minute= int(modf(timesheet.hour_from)[0]*60))
 				end_time = datetime.time(hour=int(timesheet.hour_to), minute= int(modf(timesheet.hour_to)[0]*60))
 				current_time = start_time
@@ -319,17 +319,7 @@ class ResPartner(models.Model):
 						)
 						current_time = end_date_meeting.time()
 
-					if start_date_meeting.time() < current_time and end_date_meeting.time() > current_time:
-						availability.append(
-							{
-							"address": adress.name,
-							"availibility": {"name":f"The doctor {self.name} is not available in {adress.name} from {current_time} till {end_date_meeting.time()}","state":"not_available"},
-							"date": date,
-							"start_time": str(current_time),
-							"end_time" : str(end_date_meeting.time())
-							}
-						)
-						current_time = end_date_meeting.time()
+
 				if current_time < end_time:
 						availability.append(
 							{
@@ -346,7 +336,7 @@ class ResPartner(models.Model):
 		# appoints_ids = self
 		appointment_ids = self.with_context(tz=self.env.user.tz, lang=self.env.user.lang).doctor_appiontment_ids
 		concurrent_meetings = list(filter(lambda meeting:
-		meeting.state == 'approved'
+		meeting.state not in ['draft', 'done','cancel']
 		and
 		meeting.start_date >= from_datetime
 		and
@@ -355,7 +345,7 @@ class ResPartner(models.Model):
 		meeting.address_id.id == addresse.id,
 		appointment_ids
 		))
-		return sorted(concurrent_meetings, key=lambda x: x.start_date, reverse=True)
+		return sorted(concurrent_meetings, key=lambda x: x.start_date, reverse=False)
 
 
 	def _compute_current_timesheet(self, date, time_form, time_to, address):
@@ -394,25 +384,15 @@ class ResPartner(models.Model):
 		
 		return current_timesheet or valid_timesheets[0]
 
-	# To do add write method to res.partner 
-	# def write(self, vals):
-	# 	for rec in self:
-	# 		if '' in vals :
-	# 			if vals['confirmation'] == '0' :
-	# 				vals['force_customer_signature'] = False
-	# 		if 'code' in vals :
-	# 			if vals['code'] == any(['0','3']) :
-	# 				if vals['code'] == '0' :
-	# 					vals['stock_validation'] = '0'
-	# 					vals['allow_price_change'] = False
-	# 					vals['allow_free_item'] = False
-	# 					vals['promotion'] = False
-	# 					vals['allow_shelf_count'] = False
-	# 					vals['suggestion'] = False
-	# 		if 'allow_shelf_count' in vals :
-	# 			if not vals["allow_shelf_count"] :
-	# 				vals['suggestion'] = False
-	# 				vals['minimum_value'] = 0
 
 
-	# 	return super(ResPartner, self).write(vals)
+# patient related functions
+
+		
+	@api.onchange('medical_ids')
+	def _onchange_medical_ids(self):
+		medicament_ids = self.medical_ids.mapped('medical_id')
+		result = medicament_ids._check_patient_age()
+		print(result)
+
+

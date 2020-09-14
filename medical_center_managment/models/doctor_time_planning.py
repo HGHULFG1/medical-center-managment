@@ -23,6 +23,7 @@ class DoctorAppointment(models.Model):
     _inherit = ['mail.thread.cc', 'mail.activity.mixin']
     _date_name = "start_date"
     _description = "Doctor Appointment"
+    # Todo add name instead of name_get
     doctor_id = fields.Many2one('res.partner', string = "Doctor", required = True, domain = "[('partner_type','=','dr')]")
     patient_id = fields.Many2one('res.partner', string = "Patient", required = True, domain = "[('partner_type','=','patient')]")
     address_id = fields.Many2one('res.partner', string = "Address", required = True, domain = "['|','|',('partner_type','=','clinic'),('partner_type','=','hospital'),('partner_type','=','center')]",tracking=True)

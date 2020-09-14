@@ -22,7 +22,8 @@ class Medicals(models.Model):
 	code = fields.Char("Code")
 	titer_ids = fields.Many2many("patient.medical.titer", string = "Titers")
 	description = fields.Text("Description")
-
+	
+	
 class MedicalSideEffect(models.Model):
 	_name = "patient.medicals.side.effect"
 	_description = "Medical Side Effect"
@@ -62,6 +63,8 @@ class MedicalSchedulePatient(models.Model):
 	doctor_id = fields.Many2one("res.partner", string = "Doctor", domain = "[('partner_type','=','dr')]")
 	prescription_id = fields.Many2one("doctor.prescription", string = "Presciption")
 	titer_id = fields.Many2one("patient.medical.titer", string = "Titer")
+	def _check_patient_age(self):
+		return 1
 	@api.onchange("medical_id")
 	def _onchange_titer_domain(self):
 		return {'domain': {'titer_id': [('id', 'in', self.medical_id.titer_ids.ids)]}}
