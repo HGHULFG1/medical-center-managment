@@ -4,7 +4,6 @@ odoo.define('web.CrashManagerInvalidMeeting', function (require) {
     var WebCrashManager = require('web.CrashManager');
     var core = require('web.core');
     var _t = core._t;
-    var rpc = require('web.rpc');
     WebCrashManager.CrashManager.include({
         show_warning: function (error, options) {
             // if (!this.active) {
