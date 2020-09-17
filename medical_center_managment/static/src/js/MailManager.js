@@ -13,10 +13,10 @@ var _t = core._t;
 
 
         /**
-         * Called when an activity record has been updated on the server
+         * Called when adding a non age suitable medication for a patient
          *
          * @private
-         * @param {Object} data key, value to decide activity created or deleted
+         * @param {Object} data 
          */
         _handlePartnerMedicamentsInvalidAge: function (data) {
 
