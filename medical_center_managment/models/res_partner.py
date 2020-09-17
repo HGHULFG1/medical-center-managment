@@ -24,6 +24,7 @@ class DoctorSpecialityTags(models.Model):
 	_description = "Speciality Tags"
 	_order = "name, id"
 	name = fields.Char("Name", required = True, Translate = True)
+
 class DoctorSpeciality(models.Model):
 	_name = "doctor.speciality"
 	_description = "Doctor Speciality"
@@ -33,6 +34,7 @@ class DoctorSpeciality(models.Model):
 	# children = fields.Boolean("Children Speciality")
 	tag_ids = fields.Many2many("speciality.tag")
 	doctor_ids = fields.One2many("res.partner", "speciality_id", domain = "[('partner_type','=','dr')]",string = "Doctors")
+
 class DoctorTimesheet(models.Model):
 	_name = "doctor.timesheet"
 	_description = "Doctor Timesheet"
@@ -70,12 +72,14 @@ class DoctorTimesheet(models.Model):
 	def _compute_name(self):
 		for record in self :
 			record.name = record.adress_id.name + '(' + record.dayofweek + ', ' + record.day_period + ')'
+
 class DeseaseLevel(models.Model):
 	_name = "desease.level"
 	_description = "Levels of desseases"
 	name = fields.Char("Name", required = True, Translate = True)
 	checking_period_days = fields.Integer('Check With Patient Every')
 	critical = fields.Boolean('Critical')
+
 class DeseasseLevelPartner(models.Model) :
 	_name = "desease.level.doctor.partner"
 	partner_id = fields.Many2one('res.partner', string = 'Patient', required = True, domain = "[('partner_type','=','dr')]")
@@ -89,6 +93,7 @@ class DeseasseLevelPartner(models.Model) :
 	def _onchange_desease(self):
 		lst = self.desease_id.level_ids.ids
 		return {'domain': {'level_id': [('id', 'in', lst)]}}
+
 class Desease(models.Model):
 	_name = "desease"
 	_description = "Desease"
@@ -99,11 +104,13 @@ class Desease(models.Model):
 	color = fields.Integer('Color Index')
 	contagious = fields.Boolean("Contagious?")
 	description = fields.Text("Description")
+
 class MedicalAssurance(models.Model):
 	_name = "medical.assurance"
 	_description = "Medical Assurance"
 	name = fields.Char("Name", required = True, translate = True)
 	active = fields.Boolean(default = True)
+
 class ResPartner(models.Model):
 	_inherit = "res.partner"
 	same_name = fields.Boolean(default=False, compute = "_compute_same_name")
@@ -180,7 +187,6 @@ class ResPartner(models.Model):
 			else :
 				partner.abw = 0.0
 
-
 	@api.depends('measurement_ids')
 	def _compute_measurement_count(self) :
 		for patient in self :
@@ -201,6 +207,7 @@ class ResPartner(models.Model):
 				record.doctor_appointment_count = 0
 			else :
 				record.doctor_appointment_count = len(record.doctor_appiontment_ids.ids)
+	
 	@api.depends('medical_ids')
 	def _compute_medical_count(self):
 		for record in self :
@@ -208,6 +215,7 @@ class ResPartner(models.Model):
 				record.medical_count = 0
 			else :
 				record.medical_count = len(record.medical_ids.ids)
+
 	@api.depends('name')
 	def _compute_same_name(self):
 		for partner in self:
@@ -224,6 +232,7 @@ class ResPartner(models.Model):
 				record.patient_count = 0
 			else :
 				record.patient_count = len(self.env["desease.level.doctor.partner"].search([('doctor_id','=',record.id)]).ids)
+	
 	@api.depends('disease_ids')			
 	def _compute_doctor_count(self) :
 		for record in self:
@@ -232,25 +241,23 @@ class ResPartner(models.Model):
 			else : 
 				record.doctor_count = len(record.disease_ids.ids)
 	def _validate_meeting(self, datetime_start, datetime_end, adress, meeting):
+		'''raise InvalidMeeting if there is concurrency and the meeting is not availabe '''
 		concurrent_meetings = self._compute_concurrency(datetime_start, datetime_end, adress)		
 		if concurrent_meetings:
 			availibilities = self._get_doctor_available_times(datetime_start.date(),datetime.time(hour=0, minute=0),datetime.time(hour=23, minute=59),[adress])
-			self.env['bus.bus'].sendone(
-					(self._cr.dbname, 'res.partner', self.env.user.partner_id.id),
-					{'type': 'medicaments_age_invalid', 'activity_created': True})
-			# raise InvalidMeeting(doctor=self,type="another_meeting", meeting=concurrent_meetings[0],valid_times=availibilities)
+			raise InvalidMeeting(doctor=self,type="another_meeting", meeting=concurrent_meetings[0],valid_times=availibilities)
 			return {'success': False}
 			# except InvalidMeeting as e:
 			# 	_logger.warning("dsd")
 				# return {'warning': {'title': _('Invalid Meeting'), 'message': e.message}, 'success':False}
 		else:
 			return {'success': True}
-			
 	
 	@api.model
 	def _get_available_times(self, doctor_id, date, time_start, time_end, adress):
 		return self.env["res.partner"].sudo().browse(doctor_id)._compute_concurrency(date, time_start, time_end, [adress])
 	def _get_doctor_available_times(self, date, time_start, time_end, addresses):
+		'''this function returns a list of periods splitted by doctor availibility'''
 		availability = []
 		for adress in addresses:
 			timesheet = self._compute_current_timesheet(date, time_start, time_end, adress)
@@ -335,6 +342,7 @@ class ResPartner(models.Model):
 						)
 				return availability
 	def _compute_concurrency(self, from_datetime, to_datetime, addresse):
+		'''this function returns a list of concurrent meetings, that will happen at concurrent times'''
 		# appoints_ids = self
 		appointment_ids = self.with_context(tz=self.env.user.tz, lang=self.env.user.lang).doctor_appiontment_ids
 		concurrent_meetings = list(filter(lambda meeting:
@@ -384,11 +392,7 @@ class ResPartner(models.Model):
 					current_timesheet = valid_time
 		
 		return current_timesheet or valid_timesheets[0]
-
-
-
 # patient related functions
-
 	def get_age(self):
 		'''return the age of the partner in case date of birth specified
 		else return 0
@@ -399,8 +403,6 @@ class ResPartner(models.Model):
 		today = fields.Date.today()
 		return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 		
-
-
 	def _check_age_medicals(self, medicament):
 		'''ckeck if the medicament is suitable for the age of the patient
 		'''
