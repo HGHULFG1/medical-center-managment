@@ -11,7 +11,6 @@ class Medicals(models.Model):
 	medical_schedueled_ids = fields.One2many("patient.medical.scheduel.scheduel","prescription_id", string ="Medicals")
 	name = fields.Char('Name', required = True, placeholder = 'Prescription for sugar')
 
-	@api.onchange("patient_id")
 	def _default_patient_medicals(self) :
 		for rec in self :
 			rec.patient_medical_ids = [(6,0,rec.patient_id.medical_ids.ids)]
@@ -34,5 +33,4 @@ class Medicals(models.Model):
 				medical[2]['patient_id'] = vals['patient_id']
 		return super(Medicals, self).create(vals)
 
-
-# todo add warnings and custom exceptions
+	

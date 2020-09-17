@@ -235,7 +235,11 @@ class ResPartner(models.Model):
 		concurrent_meetings = self._compute_concurrency(datetime_start, datetime_end, adress)		
 		if concurrent_meetings:
 			availibilities = self._get_doctor_available_times(datetime_start.date(),datetime.time(hour=0, minute=0),datetime.time(hour=23, minute=59),[adress])
-			raise InvalidMeeting(doctor=self,type="another_meeting", meeting=concurrent_meetings[0],valid_times=availibilities)
+			self.env['bus.bus'].sendone(
+					(self._cr.dbname, 'res.partner', self.env.user.partner_id.id),
+					{'type': 'medicaments_age_invalid', 'activity_created': True})
+			# raise InvalidMeeting(doctor=self,type="another_meeting", meeting=concurrent_meetings[0],valid_times=availibilities)
+			return {'success': False}
 			# except InvalidMeeting as e:
 			# 	_logger.warning("dsd")
 				# return {'warning': {'title': _('Invalid Meeting'), 'message': e.message}, 'success':False}
@@ -246,7 +250,6 @@ class ResPartner(models.Model):
 	@api.model
 	def _get_available_times(self, doctor_id, date, time_start, time_end, adress):
 		return self.env["res.partner"].sudo().browse(doctor_id)._compute_concurrency(date, time_start, time_end, [adress])
-	#todo test _get_doctor_available_times
 	def _get_doctor_available_times(self, date, time_start, time_end, addresses):
 		availability = []
 		for adress in addresses:
@@ -331,7 +334,6 @@ class ResPartner(models.Model):
 							}
 						)
 				return availability
-	#todo test _compute_concurrency
 	def _compute_concurrency(self, from_datetime, to_datetime, addresse):
 		# appoints_ids = self
 		appointment_ids = self.with_context(tz=self.env.user.tz, lang=self.env.user.lang).doctor_appiontment_ids
@@ -346,7 +348,6 @@ class ResPartner(models.Model):
 		appointment_ids
 		))
 		return sorted(concurrent_meetings, key=lambda x: x.start_date, reverse=False)
-
 
 	def _compute_current_timesheet(self, date, time_form, time_to, address):
 		'''this function compute the timesheet that should be used in order to validate a meeting
@@ -388,11 +389,27 @@ class ResPartner(models.Model):
 
 # patient related functions
 
+	def get_age(self):
+		'''return the age of the partner in case date of birth specified
+		else return 0
+		'''
+		born = self.birth_date
+		if not born:
+			return 0
+		today = fields.Date.today()
+		return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 		
-	@api.onchange('medical_ids')
-	def _onchange_medical_ids(self):
-		medicament_ids = self.medical_ids.mapped('medical_id')
-		result = medicament_ids._check_patient_age()
-		print(result)
 
 
+	def _check_age_medicals(self, medicament):
+		'''ckeck if the medicament is suitable for the age of the patient
+		'''
+		age = self.get_age()
+		if age:
+			if age > medicament.maximum_age and medicament.maximum_age:
+				return {"valid":False, "message":_(f"The patient is {age}, and {medicament.name} could not be taken for ages above {medicament.maximum_age}")}
+			if age < medicament.minimum_age:
+				return {"valid":False, "message":_(f"The patient is {age}, and {medicament.name} could not be taken for ages under {medicament.minimum_age}")}
+						
+		return {"valid":True}
+				

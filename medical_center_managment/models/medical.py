@@ -63,8 +63,20 @@ class MedicalSchedulePatient(models.Model):
 	doctor_id = fields.Many2one("res.partner", string = "Doctor", domain = "[('partner_type','=','dr')]")
 	prescription_id = fields.Many2one("doctor.prescription", string = "Presciption")
 	titer_id = fields.Many2one("patient.medical.titer", string = "Titer")
-	def _check_patient_age(self):
-		return 1
+
+	@api.onchange("patient_id", "medical_id")
+	def _validate_medicament_for_patient(self):
+		valid = True
+		if self.patient_id.id and self.medical_id.id:
+			result = self.patient_id._check_age_medicals(self.medical_id)
+			valid = result.get("valid")
+		if not valid:
+			self.env['bus.bus'].sendone(
+					(self._cr.dbname, 'res.partner', self.env.user.partner_id.id),
+					{'type': 'medicaments_age_invalid', 'message': result.get("message")})
+
+
+
 	@api.onchange("medical_id")
 	def _onchange_titer_domain(self):
 		return {'domain': {'titer_id': [('id', 'in', self.medical_id.titer_ids.ids)]}}
