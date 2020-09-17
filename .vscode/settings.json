@@ -19,4 +19,5 @@
         
     },
     "vsicons.presets.nestjs": true,
+    "git.ignoreLimitWarning": true,
 }

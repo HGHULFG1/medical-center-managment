@@ -407,9 +407,9 @@ class ResPartner(models.Model):
 		age = self.get_age()
 		if age:
 			if age > medicament.maximum_age and medicament.maximum_age:
-				return {"valid":False, "message":_(f"The patient is {age}, and {medicament.name} could not be taken for ages above {medicament.maximum_age}")}
+				return {"valid":False, "message":_(f"The patient is {age} years old, and {medicament.name} could not be taken for ages above {medicament.maximum_age}")}
 			if age < medicament.minimum_age:
-				return {"valid":False, "message":_(f"The patient is {age}, and {medicament.name} could not be taken for ages under {medicament.minimum_age}")}
+				return {"valid":False, "message":_(f"The patient is {age} years old, and {medicament.name} could not be taken for ages under {medicament.minimum_age}")}
 						
 		return {"valid":True}
 				

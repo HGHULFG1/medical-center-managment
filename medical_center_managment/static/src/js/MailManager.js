@@ -21,7 +21,7 @@ var _t = core._t;
         _handlePartnerMedicamentsInvalidAge: function (data) {
 
              Swal.fire({
-                icon: _t('Error'),
+                icon: 'error',
                 title: _t('Invalid medicaments...'),
                 text: data.message,
                 backdrop: false,
