@@ -411,5 +411,22 @@ class ResPartner(models.Model):
 			if age < medicament.minimum_age:
 				return {"valid":False, "message":_(f"The patient is {age} years old, and {medicament.name} could not be taken for ages under {medicament.minimum_age}")}
 						
-		return {"valid":True}
+		return {"valid": True}
+		
+	def _check_side_effects_medicaments(self, medicament):
+		'''
+		check if the medicament has side effect for that patient
+		'''
+		side_effects_ids = medicament.side_effect_ids
+		if not side_effects_ids:
+			return {"valid": True}
+		data = []
+		patient_diseases = self.disease_ids
+		side_effects_could_affects_patient = list(filter(
+			lambda side_effect:
+			not side_effect.disease_id or side_effect.disease_id.id in side_effects_ids.ids
+			, side_effects_ids
+		))
+		if side_effects_could_affects_patient:
+			return {"valid":False, "data": [{"causing":side_effect.causing_disease_id.name, "caused_by":side_effect.disease_id.name or None} for side_effect in side_effects_could_affects_patient if side_effect.causing_disease_id.name]}
 				

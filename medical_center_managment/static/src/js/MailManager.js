@@ -28,7 +28,28 @@ var _t = core._t;
                 confirmButtonText: _t("Ok")
               })
         },        
-
+        _handlePartnerMedicamentsSideEffects: function (data) {
+            var sideEffects = data.side_effects;
+            var html = `<table class="o_list_table table table-sm table-hover table-striped o_list_table_ungrouped">
+            <tr>
+            <th>Because of Having</th>
+            <th>Lead To</th>
+            </tr>`;
+            sideEffects.forEach(element => {
+                    html = html + `
+                    <tr>
+                    <td>${element.caused_by}</td>
+                    <td>${element.causing}</td>
+                    </tr>
+                    `
+            });
+            Swal.fire({
+                icon: 'warning',
+                title: _t('Side Effects...'),
+                html: html,
+                backdrop: false,
+            });
+       },   
         /**
          * On receiving a notification that is specific to a user
          *
@@ -41,6 +62,9 @@ var _t = core._t;
             this._super.apply(this, arguments);
             if (data.type === 'medicaments_age_invalid') {
                 this._handlePartnerMedicamentsInvalidAge(data);
+            }
+            else if (data.type === 'medicaments_side_effects') {
+                this._handlePartnerMedicamentsSideEffects(data);
             }
         },
     });

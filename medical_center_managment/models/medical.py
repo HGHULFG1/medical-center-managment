@@ -75,6 +75,12 @@ class MedicalSchedulePatient(models.Model):
 					(self._cr.dbname, 'res.partner', self.env.user.partner_id.id),
 					{'type': 'medicaments_age_invalid', 'message': result.get("message")})
 
+		side_effects_result = self.patient_id._check_side_effects_medicaments(self.medical_id)
+		if not side_effects_result.get("valid"):
+			self.env['bus.bus'].sendone(
+				(self._cr.dbname, 'res.partner', self.env.user.partner_id.id),
+				{'type': 'medicaments_side_effects', 'side_effects': side_effects_result.get("data")})
+
 
 
 	@api.onchange("medical_id")
