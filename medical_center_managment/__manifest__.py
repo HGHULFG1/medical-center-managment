@@ -97,7 +97,7 @@ then the system will add the duration in the visit form.
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','mail','base_geolocalize'],
+    'depends': ['base','mail','base_geolocalize','account'],
 
     # always loaded
     'data': [

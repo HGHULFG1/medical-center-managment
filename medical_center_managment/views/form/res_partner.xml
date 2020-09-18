@@ -71,6 +71,7 @@
                             </div>
                             <field name="study_field_id" placeholder="Medecine.." attrs = "{'invisible' : [('partner_type', '!=', 'dr')]}"/>
                             <field name="speciality_id" placeholder="EMERGENCY MEDECIN.." attrs = "{'invisible' : [('partner_type', '!=', 'dr')]}"/>
+                            <field name="meeting_product_id" attrs = "{'invisible' : [('partner_type', '!=', 'dr')]}"/>
                             <field name="medical_assurance_id"  attrs = "{'invisible' : [('partner_type', '!=', 'patient')]}"/>
                             
                         </group>

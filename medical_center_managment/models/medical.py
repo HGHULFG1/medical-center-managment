@@ -68,18 +68,18 @@ class MedicalSchedulePatient(models.Model):
 	def _validate_medicament_for_patient(self):
 		valid = True
 		if self.patient_id.id and self.medical_id.id:
-			result = self.patient_id._check_age_medicals(self.medical_id)
+			result = self.patient_id._check_age_medicals(self.medical_id) 
 			valid = result.get("valid")
-		if not valid:
-			self.env['bus.bus'].sendone(
-					(self._cr.dbname, 'res.partner', self.env.user.partner_id.id),
-					{'type': 'medicaments_age_invalid', 'message': result.get("message")})
+			if not valid:
+				self.env['bus.bus'].sendone(
+						(self._cr.dbname, 'res.partner', self.env.user.partner_id.id),
+						{'type': 'medicaments_age_invalid', 'message': result.get("message")})
 
-		side_effects_result = self.patient_id._check_side_effects_medicaments(self.medical_id)
-		if not side_effects_result.get("valid"):
-			self.env['bus.bus'].sendone(
-				(self._cr.dbname, 'res.partner', self.env.user.partner_id.id),
-				{'type': 'medicaments_side_effects', 'side_effects': side_effects_result.get("data")})
+			side_effects_result = self.patient_id._check_side_effects_medicaments(self.medical_id)
+			if not side_effects_result.get("valid"):
+				self.env['bus.bus'].sendone(
+					(self._cr.dbname, 'res.partner', self.env.user.partner_id.id),
+					{'type': 'medicaments_side_effects', 'side_effects': side_effects_result.get("data")})
 
 
 

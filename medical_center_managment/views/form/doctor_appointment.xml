@@ -13,7 +13,8 @@
                         attrs = "{'invisible':[('state','!=','confirm')]}"/>
                       <button name="done" string="Mark as Done" type="object" class="oe_highlight" groups="base.group_user"  attrs = "{'invisible':[('state','!=','progress')]}"/>
                     <button name="cancel" string="Cancel" groups="base.group_user" type="object"  attrs = "{'invisible':[('state','=','done')]}"/>
-                     <button name="action_prescription" string="Add Prescription" groups="base.group_user" type="object"  attrs = "{'invisible':['|','|','|',('state','=','draft'),('state','=','approved'),('state','=','cancel')]}"/>
+                    <button name="action_prescription" string="Add Prescription" groups="base.group_user" type="object"  attrs = "{'invisible':['|','|','|',('state','=','draft'),('state','=','approved'),('state','=','cancel')]}"/>
+                    <button name="create_invoice" class="oe_highlight" string="Create Invoice" groups="base.group_user" type="object"  attrs = "{'invisible':[('state','!=','done')]}"/>
                      <field name="state" widget="statusbar"
                         statusbar_visible="draft,approved,confirm,progress,done" attrs = "{'invisible':[('state','=','done')]}"/>
 
@@ -24,18 +25,20 @@
                             <button class="oe_stat_button" name="%(medical_center_managment.presciption_appointment)d" type="action" icon="fa-file-text-o">
                                 <field string="Perscriptions" name="prescription_count" widget="statinfo"/>
                             </button>
+
                         </div>
                     <widget name="web_ribbon" title="Done" attrs="{'invisible': [('state','!=','done')]}"/>
                     <div class="oe_title">
                             <group>
                                 <field name = "doctor_id"/>
                                 <field name = "patient_id" />
-
-
                                 <field name = "address_id" />
+                                <field name="invoice_id" attrs="{'invisible':[('id','=',False)],'readonly':[('id','!=',False)]}"/>
                             </group>
                         </div>
+                        
                             <group>
+                               
                             <group string = "Planning">
                                 <field name = "start_date" />
                                 <field name = "end_date" />
@@ -46,10 +49,9 @@
                                 <field name = "effective_end_date" />
                             </group>
                         </group>
-                        <group  string = "Description" />
+                        <group string = "Description" />
                             <field name = "description" nolabel = "1" />
-                          
-                        
+
                     </sheet>
                         <div class="oe_chatter">
                         <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
@@ -61,5 +63,3 @@
         </record>
     </data>
 </odoo>
-
-                  

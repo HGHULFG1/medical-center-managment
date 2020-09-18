@@ -20,4 +20,11 @@
     },
     "vsicons.presets.nestjs": true,
     "git.ignoreLimitWarning": true,
+    "python.analysis.extraPaths": [
+        "/odoo/odoo-server",
+        "/odoo",
+        "/home/hassan/bmb",
+        "/odoo/odoo-server/addons",
+        "/usr/lib/python3/dist-packages/odoo/addons"
+    ],
 }

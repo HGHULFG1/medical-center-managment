@@ -135,6 +135,8 @@ class ResPartner(models.Model):
 	patient_count = fields.Integer("Patients", compute = "_compute_patient_count")
 	doctor_appiontment_ids = fields.One2many('doctor.appointment','doctor_id', string = "Appointments")
 	doctor_appointment_count = fields.Integer('Appointments', compute = "_compute_doctor_appointment")
+	meeting_product_id = fields.Many2one('product.product', string="Product For Meetings", help="This product will be used to generate invoices for meetings")
+	
 	# Patient fields
 	contagious_disease = fields.Boolean("Contagious Diseases", compute="_compute_contagious")
 	patient_appiontment_ids = fields.One2many('doctor.appointment','patient_id', string = "Appointments")
