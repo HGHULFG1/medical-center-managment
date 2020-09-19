@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Define the report template -->
+    <template id="medical_center_managment.report_template_patinet_info">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="medical_center_managment.report_templ_patinet_translatable_info" t-lang="user.lang"/>
+            </t>
+        </t>
+    </template>
+
+    <!-- Translatable template -->
+    <template id="medical_center_managment.report_templ_patinet_translatable_info">
+        <head>
+            <title t-field="doc.name"></title>
+        </head>
+  
+        <style>
+
+            .grid-container {
+                display: table;
+                background-color: #2196F3;
+                padding: 10px;
+                width: 100%;
+              }
+              .grid-item {
+                display:table-cell;
+              }
+
+
+            ul.table {
+                list-style-type: none;
+                margin:20px 0;
+                padding: 0;
+                width: 100%;
+                display: table;
+              }
+              
+                .row {
+                  display: table-row;
+                  background: rgb(220, 217, 253);
+                }
+              
+                .row.header {
+                  font-size: 16px;
+                  font-weight: 600;
+                  color: #ffffff;
+                  background: #8faad0;
+                }
+              
+                  .cell {
+                    padding: 7px 9px;
+                    display: table-cell;
+                    border-bottom:  1px solid #8faad0;
+                  }
+                  .blood-type{
+                      color: red;
+                  }
+         
+
+
+             
+              
+        </style>
+        <t t-set="doc" t-value="doc.with_context(lang=user.lang)" />
+        <div class="page">
+        <div>
+            <div>
+                <h2>
+                    <div class="grid-container">
+                        <div class="grid-item">
+                    <span >Patient: <span t-field="doc.name"/></span>
+                        </div>
+                        <div class="grid-item blood-type">
+                    <span ><em t-field="doc.blood_type" /></span>
+
+                        </div>
+
+                </div>
+                </h2>
+            </div>
+            <br/>
+            <adresse>
+                    <span>Email:</span><br/>
+                    <span t-field="doc.email" />
+                    <br/>
+                    <span t-field="doc.city" /><br/>
+                    <span t-field="doc.country_id" />
+            </adresse>
+            <br/>
+            <br/>
+            <span >Age:
+            <span t-esc="doc.get_age()"></span></span>
+                    
+        </div>
+        <hr/>
+        <br/>
+        <br/>
+            <div>
+                <h2>Diseases</h2>
+
+                <ul class="table">
+
+                    <li class="row header">
+                        <div class="cell">
+                            Doctor
+                          </div>
+                      <div class="cell">
+                        Disease
+                      </div>
+                      <div class="cell">
+                        Level
+                      </div>
+                      
+                      
+                    </li>
+                
+                    <li t-foreach="doc.disease_ids" t-as="disease" class="row">
+                        <div class="cell">
+                            <span t-field="disease.doctor_id"></span>
+                        </div>
+                        <div class="cell">
+                            <span t-field="disease.desease_id"></span>
+                        </div>
+                        <div class="cell">
+                            <span t-field="disease.level_id"></span>
+                        </div>
+                    </li>
+                
+                  </ul>
+            </div>
+
+            <div>
+                <h2>Medications</h2>
+
+                <ul class="table">
+
+                    <li class="row header">
+                        <div class="cell">
+                            Medicine
+                          </div>
+                      <div class="cell">
+                        Titer
+                      </div>
+                      <div class="cell">
+                        Schedule
+                      </div>
+                      
+                      
+                    </li>
+                
+                    <li t-foreach="doc.medical_ids" t-as="medical" class="row">
+                        <div class="cell">
+                            <span t-field="medical.medical_id"></span>
+                        </div>
+                        <div class="cell">
+                            <span t-field="medical.titer_id"></span>
+                        </div>
+                        <div class="cell">
+                            <span t-field="medical.scheduel_id"></span>
+                        </div>
+                    </li>
+                
+                  </ul>
+            </div>
+
+        </div>
+    </template>
+
+
+    <!-- Define the report -->
+    <report id="medical_center_managment.action_report_res_partner_patinet_info" model="res.partner" string="Patient Info" report_type="qweb-pdf" name="medical_center_managment.report_template_patinet_info" file="medical_center_managment.report_template_patinet_info" attachment_use="True" paperformat="medical_center_managment.paperformat_reduced_header_medical" />
+</odoo>

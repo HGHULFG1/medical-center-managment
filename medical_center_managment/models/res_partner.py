@@ -5,6 +5,8 @@ from math import modf
 import logging
 from odoo.addons.medical_center_managment.models.exceptions.custom_exceptions import InvalidMeeting
 from pytz import timezone
+
+from odoo.tools.translate import translate
 _logger = logging.getLogger(__name__)
 
 class DoctorStatus(models.Model):
@@ -136,7 +138,7 @@ class ResPartner(models.Model):
 	doctor_appiontment_ids = fields.One2many('doctor.appointment','doctor_id', string = "Appointments")
 	doctor_appointment_count = fields.Integer('Appointments', compute = "_compute_doctor_appointment")
 	meeting_product_id = fields.Many2one('product.product', string="Product For Meetings", help="This product will be used to generate invoices for meetings")
-	
+	comment = fields.Text("Notes", translate=True)
 	# Patient fields
 	contagious_disease = fields.Boolean("Contagious Diseases", compute="_compute_contagious")
 	patient_appiontment_ids = fields.One2many('doctor.appointment','patient_id', string = "Appointments")
