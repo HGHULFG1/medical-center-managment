@@ -132,16 +132,17 @@ class ResPartner(models.Model):
 	blood_type = fields.Selection([("a+","A+"),("a-","A-"),("b+","B+"),("b-","B-"),("o+","O+"),("o-","O-"),("ab+","AB+"),("ab-","AB-")], string = "Blood Type")
 	date_last_donation = fields.Date("Last Donation Date")
 
-	surgery_count = fields.Integer('Surgery', comute="_compute_surgery_count")
+	surgery_count = fields.Integer('Surgery', compute="compute_surgery_count")
 	@api.depends("partner_type","doctor_surgery_ids","surgery_ids")
-	def _compute_surgery_count(self):
+	def compute_surgery_count(self):
 		for record in self:
+			surgery_count=0
 			if record.partner_type == "dr":
-				record.surgery_count = len(record.doctor_surgery_ids.ids)
-			elif record.partner_type == "patient":
-				record.surgery_count = len(record.surgery_ids.ids)
-			else:
-				record.surgery_count = 0
+				surgery_count = len(record.doctor_surgery_ids.ids)
+			if record.partner_type == "patient":
+				surgery_count = len(record.surgery_ids.ids)
+			record.surgery_count = surgery_count
+			
 
 	#doctor fields
 	doctor_surgery_ids = fields.One2many('surgery', 'doctor_id',string="Planned Surgeries")
