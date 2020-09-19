@@ -164,7 +164,62 @@
                 
                   </ul>
             </div>
+            <div>
+                <h2>Surgeries</h2>
 
+                <ul class="table">
+
+                    <li class="row header">
+                        <div class="cell">
+                            Doctor
+                          </div>
+                      <div class="cell">
+                        Patient
+                      </div>
+                      <div class="cell">
+                        Date
+                      </div>
+                      
+                      
+                    </li>
+                    <t t-if="doc.type=='dr'">
+                        <t t-set="surgeries" t-value="doc.doctor_surgery_ids" />
+
+                    </t>
+                    <t t-if="doc.type=='patient'">
+                        <t t-set="surgeries" t-value="doc.surgery_ids" />
+                    </t>
+                    <t t-if="doc.partner_type=='patient'">
+                    <li  t-foreach="doc.surgery_ids" t-as="surgery" class="row">
+                      
+                        <div class="cell">
+                            <span t-field="surgery.doctor_id"></span>
+                        </div>
+                        <div class="cell">
+                            <span t-field="surgery.patient_id"></span>
+                        </div>
+                        <div class="cell">
+                            <span t-field="surgery.scheduled_date"></span>
+                        </div>
+                    </li>
+                    </t>
+                    <t t-if="doc.partner_type=='dr'">
+                    <li  t-foreach="doc.doctor_surgery_ids" t-as="surgery" class="row">
+                      
+                        <div class="cell">
+                            <span t-field="surgery.doctor_id"></span>
+                        </div>
+                        <div class="cell">
+                            <span t-field="surgery.patient_id"></span>
+                        </div>
+                        <div class="cell">
+                            <span t-field="surgery.scheduled_date"></span>
+                        </div>
+                    </li>
+                    </t>
+                
+                  </ul>
+            </div>
         </div>
     </template>
 
