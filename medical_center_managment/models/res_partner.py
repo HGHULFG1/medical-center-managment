@@ -132,7 +132,19 @@ class ResPartner(models.Model):
 	blood_type = fields.Selection([("a+","A+"),("a-","A-"),("b+","B+"),("b-","B-"),("o+","O+"),("o-","O-"),("ab+","AB+"),("ab-","AB-")], string = "Blood Type")
 	date_last_donation = fields.Date("Last Donation Date")
 
+	surgery_count = fields.Integer('Surgery', comute="_compute_surgery_count")
+	@api.depends("partner_type","doctor_surgery_ids","surgery_ids")
+	def _compute_surgery_count(self):
+		for record in self:
+			if record.partner_type == "dr":
+				record.surgery_count = len(record.doctor_surgery_ids.ids)
+			elif record.partner_type == "patient":
+				record.surgery_count = len(record.surgery_ids.ids)
+			else:
+				record.surgery_count = 0
+
 	#doctor fields
+	doctor_surgery_ids = fields.One2many('surgery', 'doctor_id',string="Planned Surgeries")
 	emergency_phone = fields.Char("Emergency Phone")
 	patient_count = fields.Integer("Patients", compute = "_compute_patient_count")
 	doctor_appiontment_ids = fields.One2many('doctor.appointment','doctor_id', string = "Appointments")
@@ -140,6 +152,7 @@ class ResPartner(models.Model):
 	meeting_product_id = fields.Many2one('product.product', string="Product For Meetings", help="This product will be used to generate invoices for meetings")
 	comment = fields.Text("Notes", translate=True)
 	# Patient fields
+	surgery_ids = fields.One2many('surgery', 'patient_id', string='Surgeries')
 	contagious_disease = fields.Boolean("Contagious Diseases", compute="_compute_contagious")
 	patient_appiontment_ids = fields.One2many('doctor.appointment','patient_id', string = "Appointments")
 	patient_appointment_count = fields.Integer('Appointments', compute = "_compute_patient_appointment_count")

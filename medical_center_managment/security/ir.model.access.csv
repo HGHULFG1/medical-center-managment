@@ -23,3 +23,6 @@ medical_medical_measure_age_access_rights,Medical measurements age ranges access
 medical_medical_patient_measure_access_rights,Medical patient measure access rights,medical_center_managment.model_medical_patient_measure,base.group_user,1,1,1,1
 medical_medical_patient_measure_value_access_rights,Medical patient measure value access rights,medical_center_managment.model_patient_measure_value,base.group_user,1,1,1,1
 assurance_patient_access_rights,patient assurance access rights,medical_center_managment.model_medical_assurance,base.group_user,1,1,1,1
+
+surgery_access_rights,surgery access rights,medical_center_managment.model_surgery_type,base.group_user,1,1,1,1
+patient_surgery_access_rights,patient surgery access rights,medical_center_managment.model_surgery,base.group_user,1,1,1,1

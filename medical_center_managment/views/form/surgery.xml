@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- surgery.type form view -->
+    <record id="surgery_type_view_form" model="ir.ui.view">
+        <field name="name">surgery.type.view.form</field>
+        <field name="model">surgery.type</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+<!-- surgery form view -->
+<record id="surgery_view_form" model="ir.ui.view">
+    <field name="name">surgery.view.form</field>
+    <field name="model">surgery</field>
+    <field name="arch" type="xml">
+        <form string="">
+            <header>
+                <field name="state" widget="statusbar"/>
+            </header>
+            <sheet>
+                <group>
+                    <field name="doctor_id"/>
+                    <field name="patient_id"/>
+                    <field name="surgery_type_id"/>
+                    <field name="scheduled_date"/> 
+                    <field name="comment"/>                   
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+</odoo>

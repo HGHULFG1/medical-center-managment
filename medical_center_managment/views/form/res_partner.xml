@@ -17,7 +17,13 @@
                              <button class="oe_stat_button" name="%(medical_center_managment.patient_doctor_window_action)d" type="action" icon="fa-user-md" attrs = "{'invisible' : [('partner_type', '!=', 'patient')]}">
                                 <field string="Doctors" name="doctor_count" widget="statinfo" attrs = "{'invisible' : [('partner_type', '!=', 'patient')]}"/>
                             </button>
-                            
+
+                            <button class="oe_stat_button" name="%(medical_center_managment.surgery_doctor)d" type="action" icon="fa-user-md" attrs = "{'invisible' : [('partner_type', '!=', 'dr')]}">
+                                <field  name="surgery_count" widget="statinfo" attrs = "{'invisible' : [('partner_type', '!=', 'dr')]}"/>
+                            </button>
+                            <button class="oe_stat_button" name="%(medical_center_managment.surgery_patient)d" type="action" icon="fa-user-md" attrs = "{'invisible' : [('partner_type', '!=', 'patient')]}">
+                                <field name="surgery_count" widget="statinfo" attrs = "{'invisible' : [('partner_type', '!=', 'patient')]}"/>
+                            </button>
 
                             <button class="oe_stat_button" name="%(medical_center_managment.patient_medicals_kanban_view)d" type="action" icon="fa-medkit" attrs = "{'invisible' : [('partner_type', '!=', 'patient')]}">
                                 <field string="Medications" name="medical_count" widget="statinfo" attrs = "{'invisible' : [('partner_type', '!=', 'patient')]}"/>

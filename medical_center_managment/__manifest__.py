@@ -112,7 +112,7 @@ then the system will add the duration in the visit form.
         'views/kanban/disease.xml',
         'views/kanban/measurement_patient.xml',
         'actions/window_actions/doctor_patient.xml',
-        
+        "actions/window_actions/surgery.xml",
         'actions/window_actions/patient_doctor.xml',
         'actions/window_actions/patient_medical.xml',
         'actions/window_actions/appointments.xml',
@@ -129,6 +129,7 @@ then the system will add the duration in the visit form.
         'actions/window_actions/prescription_appointment.xml',
         'actions/window_actions/measurement.xml',
         'views/form/medicals.xml',
+        "views/form/surgery.xml",
         'views/form/disease.xml',
         'views/form/patient_scheduel_medical.xml',
         'views/form/doctor_appointment.xml',
