@@ -22,7 +22,7 @@
     <field name="arch" type="xml">
         <form string="">
             <header>
-                <field name="state" widget="statusbar"/>
+                <field name="state" widget="statusbar" clickable="True"/>
             </header>
             <sheet>
                 <group>
