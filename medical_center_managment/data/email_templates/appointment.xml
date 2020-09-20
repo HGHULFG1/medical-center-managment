@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<odoo>
+
+    <!-- Mail template are declared in a NOUPDATE block
+         so users can freely customize/delete them -->
+    <data noupdate="1">
+        <!--Email template -->
+        <record id="email_template_edi_medical_appointment" model="mail.template">
+            <field name="name">Appointment: Send by email</field>
+            <field name="model_id" ref="medical_center_managment.model_doctor_appointment"/>
+            <field name="email_from">${(object.doctor_id.email_formatted) |safe}</field>
+            <field name="partner_to">${object.patient_id.id}</field>
+            <field name="subject">Appointment with${object.doctor_id.name}</field>
+            <field name="body_html" type="html">
+<div style="margin: 0px; padding: 0px;">
+    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+        Dear ${object.partner_id.name},
+        <br /><br />
+        You have an appointment with dr. ${object.doctor_id.name}, the meeting will starts at ${object.start_date}
+
+        and it is expected to last until<strong>${ogject.end_date}</strong>
+        from ${object.company_id.name}.
+        <br /><br />
+        Do not hesitate to contact us if you have any questions.
+    </p>
+</div>
+            </field>
+            <!-- <field name="report_template" ref="account_invoices"/> -->
+            <!-- <field name="report_name">Meeting_${object.name}</field> -->
+            <field name="lang">${object.patient_id.lang}</field>
+            <field name="user_signature" eval="False"/>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>
