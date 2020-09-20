@@ -11,7 +11,11 @@
  				<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
  			</xpath>
- 		</template>
+		 </template>
+		 
+		 <template id="remove_email_footer" inherit_id="mail.message_notification_email">
+			<xpath expr="//t[1]/div[1]/p[1]" position="replace"/>
+		</template>
  		
  
 </data>
