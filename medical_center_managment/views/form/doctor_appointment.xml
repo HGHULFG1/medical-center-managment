@@ -15,6 +15,7 @@
                     <button name="cancel" string="Cancel" groups="base.group_user" type="object"  attrs = "{'invisible':[('state','=','done')]}"/>
                     <button name="action_prescription" string="Add Prescription" groups="base.group_user" type="object"  attrs = "{'invisible':['|','|','|',('state','=','draft'),('state','=','approved'),('state','=','cancel')]}"/>
                     <button name="create_invoice" class="oe_highlight" string="Create Invoice" groups="base.group_user" type="object"  attrs = "{'invisible':['|',('state','!=','done'),('invoice_id','!=',False)]}"/>
+                    <button name="action_appointment_sent" class="oe_highlight" string="Send Appointment By Email" groups="base.group_user" type="object" />
                      <field name="state" widget="statusbar"
                         statusbar_visible="draft,approved,confirm,progress,done" attrs = "{'invisible':[('state','=','done')]}"/>
 
