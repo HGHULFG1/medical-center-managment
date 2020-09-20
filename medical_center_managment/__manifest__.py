@@ -137,6 +137,7 @@ then the system will add the duration in the visit form.
         'views/form/measurement.xml',
         'views/form/measurment_patient.xml',
         'views/tree/doctor_appointment.xml',
+        'views/form/email_composer_appointment.xml',
         'views/tree/disease.xml',
         'views/tree/doctor_timesheet.xml',
         'views/tree/prescription.xml',
@@ -157,6 +158,8 @@ then the system will add the duration in the visit form.
         "reports/paper_format.xml",
         # Reports
         "reports/patient/patient_info.xml",
+        # email templates
+        "data/email_templates/appointment.xml"
     ],
     # only loaded in demonstration mode
     'demo': [
