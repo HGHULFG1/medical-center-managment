@@ -110,3 +110,62 @@ class DoctorAppointment(models.Model):
                 }
             ).id
     
+
+
+    def action_appointment_sent(self):
+        """ Open a window to compose an email, with the edi invoice template
+            message loaded by default
+        """
+        self.ensure_one()
+        template = self.env.ref('medical_center_managment.email_template_edi_medical_appointment', raise_if_not_found=False)
+        lang = self.patient_id.lang
+        if template and template.lang:
+            lang = template._render_template(template.lang, 'doctor.appointment', self.id)
+        compose_form = self.env.ref('medical_center_managment.medical_email_send_wizard_form', raise_if_not_found=False)
+        ctx = dict(
+            default_model='doctor.appointment',
+            default_res_id=self.id,
+            default_use_template=bool(template),
+            default_template_id=template and template.id or False,
+            default_composition_mode='comment',
+            mark_invoice_as_sent=True,
+            model_description=self.with_context(lang=lang)._name,
+            force_email=True
+        )
+        return {
+            'name': _('Send Appointment'),
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'medical.email.send',
+            'views': [(compose_form.id, 'form')],
+            'view_id': compose_form.id,
+            'target': 'new',
+            'context': ctx,
+        }
+
+
+    def _send_email(self):
+        if self.patient_id.email:
+            self.composer_id.send_mail()
+    def send_and_print_action(self):
+        self.ensure_one()
+        # Send the mails in the correct language by splitting the ids per lang.
+        # This should ideally be fixed in mail_compose_message, so when a fix is made there this whole commit should be reverted.
+        # basically self.body (which could be manually edited) extracts self.template_id,
+        # which is then not translated for each customer.
+        if self.composition_mode == 'mass_mail' and self.template_id:
+            active_ids = self.env.context.get('active_ids', self.res_id)
+            active_records = self.env[self.model].browse(active_ids)
+            langs = active_records.mapped('partner_id.lang')
+            default_lang = self.env.user_id.lang
+            for lang in (set(langs) or [default_lang]):
+                active_ids_lang = active_records.filtered(lambda r: r.partner_id.lang == lang).ids
+                self_lang = self.with_context(active_ids=active_ids_lang, lang=lang)
+                self_lang.onchange_template_id()
+                self_lang._send_email()
+        else:
+            self._send_email()
+        # if self.is_print:
+        #     return self._print_document()
+        # return {'type': 'ir.actions.act_window_close'}
