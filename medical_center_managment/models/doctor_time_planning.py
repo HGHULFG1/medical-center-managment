@@ -1,20 +1,8 @@
 # -*- coding: utf-8 -*-
-from collections import defaultdict
-import math
-from datetime import datetime, time, timedelta
-from dateutil.relativedelta import relativedelta
-from dateutil.rrule import rrule, DAILY, WEEKLY
-from functools import partial
-from itertools import chain
-from pytz import timezone, utc
 from odoo import api, fields, models, _
-from odoo.addons.base.models.res_partner import _tz_get
-from odoo.exceptions import UserError, ValidationError
-from odoo.osv import expression
-from odoo.tools.float_utils import float_round
-from odoo.tools import date_utils, float_utils
 
 class DoctorAppointment(models.Model):
+    """This class is used to store the meetings"""
     _name = "doctor.appointment"
     _inherit = ['mail.thread.cc', 'mail.activity.mixin']
     _date_name = "start_date"
@@ -25,9 +13,10 @@ class DoctorAppointment(models.Model):
     address_id = fields.Many2one('res.partner', string = "Address", required = True, domain = "['|','|',('partner_type','=','clinic'),('partner_type','=','hospital'),('partner_type','=','center')]",tracking=True)
     prescription_ids = fields.One2many("doctor.prescription", 'appointment_id', string = "Prescriptions",copy=False)
     prescription_count = fields.Integer("Prescription Count", compute = "_compute_prescription_count")
-    
     @api.depends('prescription_ids')
     def _compute_prescription_count(self):
+        """compute the prescription count related to the meeting
+        """
         for record in self :
             record.prescription_count = len(record.prescription_ids.ids)
     # Planned times
@@ -41,7 +30,6 @@ class DoctorAppointment(models.Model):
     description = fields.Text("Description")
     #Invoicing fields
     invoice_id = fields.Many2one('account.move', string='Invoice', copy=False)
-    
     #TODO implement this function
     def constrains_doctor_timesheet(self):
         """
@@ -52,6 +40,8 @@ class DoctorAppointment(models.Model):
         # valid_timesheets = list(filter(lambda time: time.address_id = self.address_id and ))
 
     def name_get(self):
+        """function to get the name of meetings
+        """
         result = []
         for appointment in self:
             doctor_title =  appointment.doctor_id.title.name or '' 
@@ -70,15 +60,25 @@ class DoctorAppointment(models.Model):
 
     #Process actions
     def confirm(self):
+        """set state to confirm
+        """        
         self.state = 'confirm'
     def cancel(self):
+        """cancel the meeting, set state to cancel
+        """        
         self.state = 'cancel'
     def start(self):
+        """start the meeting, set state to start
+        """        
         self.state = 'progress'
     def done(self):
+        """set meeting state as done
+        """
         self.state = 'done'
 
     def action_prescription(self):
+        """open a window to allow creation of prescription in the meeting
+        """
 
         return {
             'name': _('Add Prescription To Appointment'),
@@ -109,9 +109,7 @@ class DoctorAppointment(models.Model):
                     )]
                 }
             ).id
-    
-
-
+  
     def action_appointment_sent(self):
         """ Open a window to compose an email, with the edi invoice template
             message loaded by default
@@ -143,29 +141,3 @@ class DoctorAppointment(models.Model):
             'target': 'new',
             'context': ctx,
         }
-
-
-    def _send_email(self):
-        if self.patient_id.email:
-            self.composer_id.send_mail()
-    def send_and_print_action(self):
-        self.ensure_one()
-        # Send the mails in the correct language by splitting the ids per lang.
-        # This should ideally be fixed in mail_compose_message, so when a fix is made there this whole commit should be reverted.
-        # basically self.body (which could be manually edited) extracts self.template_id,
-        # which is then not translated for each customer.
-        if self.composition_mode == 'mass_mail' and self.template_id:
-            active_ids = self.env.context.get('active_ids', self.res_id)
-            active_records = self.env[self.model].browse(active_ids)
-            langs = active_records.mapped('partner_id.lang')
-            default_lang = self.env.user_id.lang
-            for lang in (set(langs) or [default_lang]):
-                active_ids_lang = active_records.filtered(lambda r: r.partner_id.lang == lang).ids
-                self_lang = self.with_context(active_ids=active_ids_lang, lang=lang)
-                self_lang.onchange_template_id()
-                self_lang._send_email()
-        else:
-            self._send_email()
-        # if self.is_print:
-        #     return self._print_document()
-        # return {'type': 'ir.actions.act_window_close'}

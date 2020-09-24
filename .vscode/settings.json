@@ -1,20 +1,23 @@
 {
     "python.linting.pylintEnabled": true,
+    "python.linting.pylintCategorySeverity.convention": "Information",
+    "python.linting.pylintArgs": ["--load-plugins", "pylint_odoo"],
     "python.pythonPath": "odoo/odoo-server",
     "python.autoComplete.extraPaths": [
         "/odoo/odoo-server",
         "/odoo",
         "/home/hassan/bmb",
         "/odoo/odoo-server/addons",
+        "/odoo/odoo-server/odoo/addons",
         "/usr/lib/python3/dist-packages/odoo/addons",
     ],
     "python.formatting.provider": "yapf",
     "workbench.colorCustomizations":{
         "tab.activeBackground": "#918181",
-        "activityBar.activeBackground": "#34393a",
-        "activityBar.border": "#f8f5f5",
+        "activityBar.activeBackground": "#df0505",
+        "activityBar.border": "#ee0808",
         "symbolIcon.folderColor": "#ff0000",
-        "symbolIcon.folderForeground": "#ff0000",
+        "symbolIcon.folderForeground": "#f70a0a",
         
         
     },
@@ -27,4 +30,6 @@
         "/odoo/odoo-server/addons",
         "/usr/lib/python3/dist-packages/odoo/addons"
     ],
+    "python.linting.flake8Enabled": false,
+    "python.linting.enabled": true,
 }

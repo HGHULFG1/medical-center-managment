@@ -15,7 +15,7 @@ class Medicals(models.Model):
 	name = fields.Char("Commercial Name", required = True)
 	scientific_name = fields.Char("Scientific Name")
 	side_effect_ids = fields.One2many("patient.medicals.side.effect", 'medical_id', string = "Side Effects")
-	disease_ids = fields.Many2many('desease', 'desease_medical_rel','desease_id','medical_id', string = "Diseases")
+	disease_ids = fields.Many2many('desease', 'desease_medical_rel', 'desease_id', 'medical_id', string = "Diseases")
 	minimum_age = fields.Integer("Don't Take If Under")
 	maximum_age = fields.Integer("Don't Take If Above")
 	barcode = fields.Char('Barcode')
@@ -46,39 +46,42 @@ class MedicalScheduleLine(models.Model):
 	name = fields.Char("Name")
 	description = fields.Char("Description")
 	scheduel_id = fields.Many2one("patient.medicals.scheduel")
-	scheduel_type = fields.Selection([("time","Time"),("activity","Activity")])
-	scheduel_activity = fields.Selection([("before_breakfast","Before Breakfast"),("after_breakfast","After Breakfast")
-		,("before_lunch","Before Lunch"),("after_lunch","After Lunch"),("before_dinner","Before Dinner")
-		,("after_dinner","After Dinner")])
+	scheduel_type = fields.Selection([("time", "Time"), ("activity", "Activity")])
+	scheduel_activity = fields.Selection([("before_breakfast", "Before Breakfast"), ("after_breakfast", "After Breakfast")
+		, ("before_lunch", "Before Lunch"), ("after_lunch", "After Lunch"), ("before_dinner", "Before Dinner")
+		, ("after_dinner", "After Dinner")])
 	quantity = fields.Float("Quantity")
 
 class MedicalSchedulePatient(models.Model):
 
 	_name = "patient.medical.scheduel.scheduel"
-	patient_id = fields.Many2one("res.partner", string = "Patient", required = True, domain = "[('partner_type','=','patient')]")
+	patient_id = fields.Many2one("res.partner", string = "Patient", required = True, domain = "[('partner_type', ' = ', 'patient')]")
 	medical_id = fields.Many2one("patient.medicals", string = "Medical", required = True)
 	scheduel_id = fields.Many2one("patient.medicals.scheduel", string = "Scheduel", required = True)
 	schedule_appointment = fields.Many2one("doctor.appointment", string = "Schedueld In")
-	appointment_id = fields.Many2one("doctor.appointment", string = "Schedueld Date", domain = "[('patient_id','=',patient_id),('doctor_id','=',doctor_id)]")
-	doctor_id = fields.Many2one("res.partner", string = "Doctor", domain = "[('partner_type','=','dr')]")
+	appointment_id = fields.Many2one("doctor.appointment", string = "Schedueld Date", domain = "[('patient_id', ' = ', patient_id), ('doctor_id', ' = ', doctor_id)]")
+	doctor_id = fields.Many2one("res.partner", string = "Doctor", domain = "[('partner_type', ' = ', 'dr')]")
 	prescription_id = fields.Many2one("doctor.prescription", string = "Presciption")
 	titer_id = fields.Many2one("patient.medical.titer", string = "Titer")
-
+	#functions
 	@api.onchange("patient_id", "medical_id")
 	def _validate_medicament_for_patient(self):
+		""""Warning if the medicine is not suitable for the age of the customer, or 
+		if the medicine has side effects for the patient."""
+		
 		valid = True
 		if self.patient_id.id and self.medical_id.id:
 			result = self.patient_id._check_age_medicals(self.medical_id) 
 			valid = result.get("valid")
 			if not valid:
 				self.env['bus.bus'].sendone(
-						(self._cr.dbname, 'res.partner', self.env.user.partner_id.id),
+						(self._cr.dbname, 'res.partner', self.env.user.partner_id.id), 
 						{'type': 'medicaments_age_invalid', 'message': result.get("message")})
 
 			side_effects_result = self.patient_id._check_side_effects_medicaments(self.medical_id)
 			if not side_effects_result.get("valid"):
 				self.env['bus.bus'].sendone(
-					(self._cr.dbname, 'res.partner', self.env.user.partner_id.id),
+					(self._cr.dbname, 'res.partner', self.env.user.partner_id.id), 
 					{'type': 'medicaments_side_effects', 'side_effects': side_effects_result.get("data")})
 
 
