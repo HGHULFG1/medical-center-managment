@@ -1,5 +1,5 @@
 {
-    "python.linting.pylintEnabled": true,
+    "python.linting.pylintEnabled": false,
     "python.linting.pylintCategorySeverity.convention": "Information",
     "python.linting.pylintArgs": ["--load-plugins", "pylint_odoo"],
     "python.pythonPath": "odoo/odoo-server",
@@ -32,4 +32,5 @@
     ],
     "python.linting.flake8Enabled": false,
     "python.linting.enabled": true,
+    "python.linting.pydocstyleEnabled": true,
 }

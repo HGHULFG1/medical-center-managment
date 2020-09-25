@@ -1,6 +1,10 @@
+"""Add model prescription."""
+
 from odoo import models, fields, api
 
-class Medicals(models.Model):
+class Prescriptions(models.Model):
+	"""."""
+
 	_name = "doctor.prescription"
 	_description = "Doctor Prescriptions"
 	_inherit = ['mail.thread.cc', 'mail.activity.mixin']
@@ -11,26 +15,28 @@ class Medicals(models.Model):
 	medical_schedueled_ids = fields.One2many("patient.medical.scheduel.scheduel","prescription_id", string ="Medicals")
 	name = fields.Char('Name', required = True, placeholder = 'Prescription for sugar')
 
-	def _default_patient_medicals(self) :
+	def _default_patient_medicals(self):
 		for rec in self :
 			rec.patient_medical_ids = [(6,0,rec.patient_id.medical_ids.ids)]
 	patient_medical_ids = fields.Many2many("patient.medical.scheduel.scheduel", string = "Patient Medicals", default = _default_patient_medicals)
 	description = fields.Html("Description")
 
 
-	def write(self,vals) :
+	def write(self,vals):
+		"""Add the medications of the prescription to the patient."""
 		for prescription in self :
-			if 'medical_schedueled_ids' in vals :
-				for medical in vals['medical_schedueled_ids'] :
+			if 'medical_schedueled_ids' in vals:
+				for medical in vals['medical_schedueled_ids']:
 					medical[2]['doctor_id'] = prescription.doctor_id.id
 					medical[2]['patient_id'] = prescription.patient_id.id
-		return super(Medicals, self).write(vals)	
+		return super(Prescriptions, self).write(vals)	
 	@api.model
 	def create(self, vals):
+		"""Add the medications of the prescription to the patient."""
 		if 'medical_schedueled_ids' in vals :
-			for medical in vals['medical_schedueled_ids'] :
+			for medical in vals['medical_schedueled_ids']:
 				medical[2]['doctor_id'] = vals['doctor_id']
 				medical[2]['patient_id'] = vals['patient_id']
-		return super(Medicals, self).create(vals)
+		return super(Prescriptions, self).create(vals)
 
 	

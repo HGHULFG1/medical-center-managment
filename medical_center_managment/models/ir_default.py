@@ -3,20 +3,17 @@ from odoo import api, fields, models, tools, _
 
 import json
 class IrDefault(models.Model):
-    """ User-defined default values for fields. """
+    """User-defined default values for fields."""
+    
     _inherit = 'ir.default'
-
-
     @api.model
     @tools.ormcache('self.env.uid', 'self.env.company.id', 'model_name', 'condition')
     # Note about ormcache invalidation: it is not needed when deleting a field,
     # a user, or a company, as the corresponding defaults will no longer be
     # requested. It must only be done when a user's company is modified.
     def get_model_defaults(self, model_name, condition=False, company = False):
-        """ Return the available default values for the given model (for the
-            current user), as a dict mapping field names to values.
-        """
-
+        """Return the available default values for the given model (for the\
+            current user), as a dict mapping field names to values."""
         cr = self.env.cr
         if not self.env.uid or not self.env.company.id : 
           return {}

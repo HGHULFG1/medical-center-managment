@@ -1,12 +1,28 @@
+"""Track the surgeries of the patient, this will help doctors specify carefully treatments\
+for their patients.
+
+For example allow the system to send notification/emails to the doctor telling them to 
+stop a medicine because it will have side effect with the upcoming surgery.
+
+Added models:
+SurgeryType
+Surgery
+"""
+
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
 class SurgeryType(models.Model):
+    """."""
+
     _name = 'surgery.type'
     _description = 'Surgery Type'
     name = fields.Char(string='Name', translate=True, required=True)
 
+
 class Surgery(models.Model):
+    """."""
+    
     _name = 'surgery'
     _description = 'Surgery'
     surgery_type_id = fields.Many2one('surgery.type', string='Surgery', required=True)

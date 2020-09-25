@@ -1,6 +1,20 @@
+"""Create models related to medications for patients.
+
+Classes:
+MedicalsTiters
+Medicals
+MedicalSideEffect
+MedicalSchedule
+MedicalScheduleLine
+MedicalSchedulePatient
+MedicalSchedulePatient
+"""
+
 from odoo import models, fields, api
 
 class MedicalsTiters(models.Model):
+	"""Add model for medicines titers."""
+	
 	_name = "patient.medical.titer"
 	_description = "Medicals Titers"
 	name = fields.Char("Label")
@@ -9,6 +23,8 @@ class MedicalsTiters(models.Model):
 
 
 class Medicals(models.Model):
+	"""Add model for medicines and treatment."""
+
 	_name = "patient.medicals"
 	_description = "Medicals"
 	_inherit = ['mail.thread.cc', 'mail.activity.mixin']
@@ -25,6 +41,8 @@ class Medicals(models.Model):
 	
 	
 class MedicalSideEffect(models.Model):
+	"""Add model for side effects of medicines and medications."""
+
 	_name = "patient.medicals.side.effect"
 	_description = "Medical Side Effect"
 	medical_id = fields.Many2one('patient.medicals', string = "Medical")
@@ -33,6 +51,8 @@ class MedicalSideEffect(models.Model):
 	description = fields.Char('Description', required = True)
 
 class MedicalSchedule(models.Model):
+	"""Add model for medication schedule."""
+
 	_name = "patient.medicals.scheduel"
 	_description = "Medical Scheduel"
 	name = fields.Char('Name')
@@ -41,6 +61,8 @@ class MedicalSchedule(models.Model):
 	schedule_line_ids = fields.One2many('patient.medicals.scheduel.line', 'scheduel_id', string = "Scheduels")
 
 class MedicalScheduleLine(models.Model):
+	"""Add model for medication's schedules details."""
+
 	_name = "patient.medicals.scheduel.line"
 	_description = "Medical Schedule Line"	
 	name = fields.Char("Name")
@@ -53,7 +75,8 @@ class MedicalScheduleLine(models.Model):
 	quantity = fields.Float("Quantity")
 
 class MedicalSchedulePatient(models.Model):
-
+	"""Add model to schedule medications for patients."""
+	
 	_name = "patient.medical.scheduel.scheduel"
 	patient_id = fields.Many2one("res.partner", string = "Patient", required = True, domain = "[('partner_type', ' = ', 'patient')]")
 	medical_id = fields.Many2one("patient.medicals", string = "Medical", required = True)
@@ -66,9 +89,11 @@ class MedicalSchedulePatient(models.Model):
 	#functions
 	@api.onchange("patient_id", "medical_id")
 	def _validate_medicament_for_patient(self):
-		""""Warning if the medicine is not suitable for the age of the customer, or 
-		if the medicine has side effects for the patient."""
-		
+		"""Validate when adding a measurment to a patient.
+
+		warning if the medicine is not suitable for the age of the customer, or 
+		if the medicine has side effects for the patient.
+		"""
 		valid = True
 		if self.patient_id.id and self.medical_id.id:
 			result = self.patient_id._check_age_medicals(self.medical_id) 

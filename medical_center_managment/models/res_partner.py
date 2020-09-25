@@ -1,3 +1,21 @@
+"""Create and update models concerning patient and doctor.
+
+Added models for doctor:
+FieldStudy
+DoctorSpecialityTags: allow user to easily figure something about the doctor speciality.
+DoctorSpeciality
+DoctorTimesheet: allow to track the timesheet of the doctor.
+
+Added models for patient:
+DeseaseLevel
+DeseasseLevelPartner: the diseases of the patient
+Desease
+MedicalAssurance
+
+Modified model:
+ResPartner: add fields for doctor (timesheet_ids, speciality, ..), and fields for 
+patient (blood type, weight, height, diseases, measurements, ...)
+"""
 from odoo import models, fields, api, _
 import pytz
 import datetime
@@ -10,24 +28,35 @@ from odoo.tools.translate import translate
 _logger = logging.getLogger(__name__)
 
 class DoctorStatus(models.Model):
+	"""."""
+
 	_name = "doctor.status"
 	_description = "Doctor Status"
 	_order = "name, id"
 	name = fields.Char("Name", required = True, Translate = True)
-	
+
+
 class FieldStudy(models.Model):
+	"""."""
+
 	_name = "field.study"
 	_description = "Field Study"
 	_order = "name, id"
 	name = fields.Char("Name", required = True, Translate = True)
 
+
 class DoctorSpecialityTags(models.Model):
+	"""."""
+
 	_name = "speciality.tag"
 	_description = "Speciality Tags"
 	_order = "name, id"
 	name = fields.Char("Name", required = True, Translate = True)
 
+
 class DoctorSpeciality(models.Model):
+	"""."""
+
 	_name = "doctor.speciality"
 	_description = "Doctor Speciality"
 	_order = "name, id"
@@ -37,7 +66,10 @@ class DoctorSpeciality(models.Model):
 	tag_ids = fields.Many2many("speciality.tag")
 	doctor_ids = fields.One2many("res.partner", "speciality_id", domain = "[('partner_type','=','dr')]",string = "Doctors")
 
+
 class DoctorTimesheet(models.Model):
+	"""Track the presence of each doctor in each address(clinic, hospital,..)."""
+
 	_name = "doctor.timesheet"
 	_description = "Doctor Timesheet"
 	name = fields.Char( compute = "_compute_name")
@@ -75,14 +107,20 @@ class DoctorTimesheet(models.Model):
 		for record in self :
 			record.name = record.adress_id.name + '(' + record.dayofweek + ', ' + record.day_period + ')'
 
+
 class DeseaseLevel(models.Model):
+	"""Track the disease level."""
+
 	_name = "desease.level"
 	_description = "Levels of desseases"
 	name = fields.Char("Name", required = True, Translate = True)
 	checking_period_days = fields.Integer('Check With Patient Every')
 	critical = fields.Boolean('Critical')
 
+
 class DeseasseLevelPartner(models.Model) :
+	"""Add diseases to patient."""
+
 	_name = "desease.level.doctor.partner"
 	partner_id = fields.Many2one('res.partner', string = 'Patient', required = True, domain = "[('partner_type','=','dr')]")
 	desease_id = fields.Many2one('desease', string = 'Desease', required = True)
@@ -96,7 +134,16 @@ class DeseasseLevelPartner(models.Model) :
 		lst = self.desease_id.level_ids.ids
 		return {'domain': {'level_id': [('id', 'in', lst)]}}
 
+
 class Desease(models.Model):
+	"""Add deasese model.
+	
+	attr:
+	contagious: we need to show the doctor a flag when the patient has a contagious disease.
+	doctor_speciality_id: doctors having this speciality will be allowed to serve the patient when he specify \
+		his disease.
+	"""
+
 	_name = "desease"
 	_description = "Desease"
 	_inherit = ['mail.thread.cc', 'mail.activity.mixin']
@@ -107,13 +154,19 @@ class Desease(models.Model):
 	contagious = fields.Boolean("Contagious?")
 	description = fields.Text("Description")
 
+
 class MedicalAssurance(models.Model):
+	"""."""
+
 	_name = "medical.assurance"
 	_description = "Medical Assurance"
 	name = fields.Char("Name", required = True, translate = True)
 	active = fields.Boolean(default = True)
 
+
 class ResPartner(models.Model):
+	"""Inherit the ResPartner Odoo class to add fields for patient and doctor."""
+
 	_inherit = "res.partner"
 	same_name = fields.Boolean(default=False, compute = "_compute_same_name")
 	partner_type = fields.Selection([("dr","Doctor"),("patient","Patient"),("hospital","Hospital"),("center","Medical Center"),("clinic","Clinic"),('insurance',"Insurance")], string = "Type")
@@ -131,10 +184,11 @@ class ResPartner(models.Model):
 	hospital_ids = fields.Many2many("res.partner","doctor_hospital_rel", "doctor_id","hospital_id",  string = "Hospitals", domain = "[('partner_type','=','hospital')]")
 	blood_type = fields.Selection([("a+","A+"),("a-","A-"),("b+","B+"),("b-","B-"),("o+","O+"),("o-","O-"),("ab+","AB+"),("ab-","AB-")], string = "Blood Type")
 	date_last_donation = fields.Date("Last Donation Date")
-
 	surgery_count = fields.Integer('Surgery', compute="compute_surgery_count")
+	
 	@api.depends("partner_type","doctor_surgery_ids","surgery_ids")
 	def compute_surgery_count(self):
+		"""Compute the count of the surgeries a patient has."""
 		for record in self:
 			surgery_count=0
 			if record.partner_type == "dr":
@@ -142,8 +196,6 @@ class ResPartner(models.Model):
 			if record.partner_type == "patient":
 				surgery_count = len(record.surgery_ids.ids)
 			record.surgery_count = surgery_count
-			
-
 	#doctor fields
 	doctor_surgery_ids = fields.One2many('surgery', 'doctor_id',string="Planned Surgeries")
 	emergency_phone = fields.Char("Emergency Phone")
@@ -177,6 +229,7 @@ class ResPartner(models.Model):
 	# disability_ids = fields.Many2many('disability', 'disability_partner_rel','contact_id','disability_id',string = "Disabilities")
 	# functions 
 	# Please implement me, but before create system parameter refer to tasks, Todo
+	
 	@api.depends('disease_ids')
 	def _compute_contagious(self) :
 		for patient in self :
@@ -198,10 +251,8 @@ class ResPartner(models.Model):
 	@api.depends('ibw')
 	def _compute_abw(self):
 		for partner in self :
-
 			if partner.weight > 1.3 * partner.ibw and  partner.gender and partner.partner_type == 'patient':
 				partner.abw = partner.ibw + 0.4 * (partner.weight - partner.ibw)
-
 			else :
 				partner.abw = 0.0
 
@@ -258,35 +309,33 @@ class ResPartner(models.Model):
 				record.doctor_count = 0
 			else : 
 				record.doctor_count = len(record.disease_ids.ids)
+	
 	def _validate_meeting(self, datetime_start, datetime_end, adress, meeting):
-		'''raise InvalidMeeting if there is concurrency and the meeting is not availabe '''
+		"""Raise InvalidMeeting if there is concurrency and the meeting is not availabe."""
 		concurrent_meetings = self._compute_concurrency(datetime_start, datetime_end, adress)		
 		if concurrent_meetings:
 			availibilities = self._get_doctor_available_times(datetime_start.date(),datetime.time(hour=0, minute=0),datetime.time(hour=23, minute=59),[adress])
 			raise InvalidMeeting(doctor=self,type="another_meeting", meeting=concurrent_meetings[0],valid_times=availibilities)
-			return {'success': False}
-			# except InvalidMeeting as e:
-			# 	_logger.warning("dsd")
-				# return {'warning': {'title': _('Invalid Meeting'), 'message': e.message}, 'success':False}
 		else:
 			return {'success': True}
 	
 	@api.model
 	def _get_available_times(self, doctor_id, date, time_start, time_end, adress):
 		return self.env["res.partner"].sudo().browse(doctor_id)._compute_concurrency(date, time_start, time_end, [adress])
+	
 	def _get_doctor_available_times(self, date, time_start, time_end, addresses):
-		'''this function returns a list of periods splitted by doctor availibility'''
+		"""Return a list of periods splitted by doctor availibility."""
 		availability = []
 		for adress in addresses:
 			timesheet = self._compute_current_timesheet(date, time_start, time_end, adress)
 			if not timesheet:
 				availability.append(
 					{
-						"address": adress.name,
-						"availibility": {"name":f"The doctor {self.name} is not available in {adress.name}", "state":"not_available"},
-						"date": date,
-						"start_time": str(time_start),
-						"end_time" : str(time_end)
+					"address": adress.name,
+					"availibility": {"name":f"The doctor {self.name} is not available in {adress.name}", "state":"not_available"},
+					"date": date,
+					"start_time": str(time_start),
+					"end_time" : str(time_end)
 
 					}
 				)
@@ -309,7 +358,6 @@ class ResPartner(models.Model):
 						}
 					)
 					continue
-				availability_details = []
 				for index, meeting in enumerate(meetings):
 					tz = timezone(self.env.user.tz)
 					start_date_meeting = pytz.utc.localize(meeting.start_date).astimezone(tz)
@@ -359,8 +407,9 @@ class ResPartner(models.Model):
 							}
 						)
 				return availability
+	
 	def _compute_concurrency(self, from_datetime, to_datetime, addresse):
-		'''this function returns a list of concurrent meetings, that will happen at concurrent times'''
+		"""Return a list of concurrent meetings, that will happen at concurrent times."""
 		# appoints_ids = self
 		appointment_ids = self.with_context(tz=self.env.user.tz, lang=self.env.user.lang).doctor_appiontment_ids
 		concurrent_meetings = list(filter(lambda meeting:
@@ -376,16 +425,12 @@ class ResPartner(models.Model):
 		return sorted(concurrent_meetings, key=lambda x: x.start_date, reverse=False)
 
 	def _compute_current_timesheet(self, date, time_form, time_to, address):
-		'''this function compute the timesheet that should be used in order to validate a meeting
-		the retrun value is an object of type 'doctor.timesheet' or False
-		'''
+		"""Compute the timesheet that should be used in order to validate a meeting\
+		the retrun value is an object of type 'doctor.timesheet' or False."""
 		timesheet_ids = self.with_context(tz=self.env.user.tz, lang=self.env.user.lang).timesheet_ids
 		weekday = date.weekday()
 		current_timesheet = False
 		current_date_from = datetime.datetime.min
-
-
-		# start_datetime = datetime.datetime.combine(start_date, start_time)
 		valid_timesheets = list(
 		filter(lambda time: time.dayofweek == str(weekday)
 		and
@@ -412,9 +457,8 @@ class ResPartner(models.Model):
 		return current_timesheet or valid_timesheets[0]
 # patient related functions
 	def get_age(self):
-		'''return the age of the partner in case date of birth specified
-		else return 0
-		'''
+		"""Return the age of the partner in case date of birth specified\
+		else return 0."""
 		born = self.birth_date
 		if not born:
 			return 0
@@ -422,8 +466,7 @@ class ResPartner(models.Model):
 		return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
 		
 	def _check_age_medicals(self, medicament):
-		'''ckeck if the medicament is suitable for the age of the patient
-		'''
+		"""Ckeck if the medicament is suitable for the age of the patient."""
 		age = self.get_age()
 		if age:
 			if age > medicament.maximum_age and medicament.maximum_age:
@@ -434,9 +477,7 @@ class ResPartner(models.Model):
 		return {"valid": True}
 		
 	def _check_side_effects_medicaments(self, medicament):
-		'''
-		check if the medicament has side effect for that patient
-		'''
+		"""Check if the medicament has side effect for that patient."""
 		side_effects_ids = medicament.side_effect_ids
 		if not side_effects_ids:
 			return {"valid": True}

@@ -1,3 +1,14 @@
+"""Add classes for the access token to be used in api communications.
+
+Added Models:
+APIAccessToken: store access token data (e.g the user, the token string, expiration..)
+
+Modified Models:
+Users: store access tokens for the user.
+
+Functions:
+nonce: generate the token string.
+"""
 import hashlib
 import os
 from datetime import datetime, timedelta
@@ -8,7 +19,7 @@ from odoo.http import request
 expires_in = "medical_center_managment.access_token_expires_in"
 
 def nonce(length = 40, prefix = "access_token"):
-    """generate an access token string
+    """Generate an access token string.
 
     Args:
         length (int, optional): the length of the generated string. Defaults to 40.
@@ -21,8 +32,8 @@ def nonce(length = 40, prefix = "access_token"):
     return "{}_{}".format(prefix, str(hashlib.sha1(rbytes).hexdigest()))
 
 class APIAccessToken(models.Model):
-    """"Access token string, to store the user tokens"""
-    
+    """Access token string, to store the user tokens."""
+
     _name = "api.access_token"
     token = fields.Char("Access Token", required = True)
     user_id = fields.Many2one("res.users", string = "User", required = True)
@@ -31,7 +42,9 @@ class APIAccessToken(models.Model):
 
     @classmethod
     def find_one_or_create_token(cls, user_id = None, create = False):
-        """generate or find access tokens to users, if user is not sent 
+        """Generate or find access tokens to users, if user is not sent.
+
+        Description:
         it will generate token for the user of the env.
         if create is false it will only search for existing valid tokens.
 
@@ -74,27 +87,25 @@ class APIAccessToken(models.Model):
         return access_token.token
 
     def is_valid(self, scopes = None):
-        """
-        Checks if the access token is valid.
-        :param scopes: An iterable containing the scopes to check or None
+        """Check if the access token is valid.
+
+        Args: 
+        scopes: An iterable containing the scopes to check or None
         """
         self.ensure_one()
         return not self.has_expired() and self._allow_scopes(scopes)
     
     def has_expired(self):
-        """Check if the token has expired 
+        """Check if the token has expired.
 
         Returns:
             [boolean]: expired = True
         """
-        
         self.ensure_one()
         return datetime.now() > fields.Datetime.from_string(self.expires)
 
     def _allow_scopes(self, scopes):
-        """
-        If the token is used for specific scopes
-        """
+        """Check If the token is used for specific scopes."""
         self.ensure_one()
         if not scopes:
             return True
@@ -103,7 +114,7 @@ class APIAccessToken(models.Model):
         return resource_scopes.issubset(provided_scopes)
 
 class Users(models.Model):
-    """"Add one2many tokens field into users table"""
-    
+    """Add one2many tokens field into users table."""
+
     _inherit = "res.users"
     token_ids = fields.One2many("api.access_token", "user_id", string = "Access Tokens")
