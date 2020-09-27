@@ -1,8 +1,11 @@
 {
+
+    "mypy.configFile": ".mypy_cache/mypy.ini",
     "python.linting.pylintEnabled": false,
     "python.linting.pylintCategorySeverity.convention": "Information",
     "python.linting.pylintArgs": ["--load-plugins", "pylint_odoo"],
     "python.pythonPath": "odoo/odoo-server",
+    "editor.formatOnSave": true,
     "python.autoComplete.extraPaths": [
         "/odoo/odoo-server",
         "/odoo",
@@ -11,15 +14,15 @@
         "/odoo/odoo-server/odoo/addons",
         "/usr/lib/python3/dist-packages/odoo/addons",
     ],
-    "python.formatting.provider": "yapf",
-    "workbench.colorCustomizations":{
+    "python.formatting.provider": "autopep8",
+    "workbench.colorCustomizations": {
         "tab.activeBackground": "#918181",
         "activityBar.activeBackground": "#df0505",
         "activityBar.border": "#ee0808",
         "symbolIcon.folderColor": "#ff0000",
         "symbolIcon.folderForeground": "#f70a0a",
-        
-        
+
+
     },
     "vsicons.presets.nestjs": true,
     "git.ignoreLimitWarning": true,
@@ -32,5 +35,11 @@
     ],
     "python.linting.flake8Enabled": false,
     "python.linting.enabled": true,
-    "python.linting.pydocstyleEnabled": true,
+    "python.linting.pydocstyleEnabled": false,
+    "python.linting.mypyEnabled": false,
+    "python.linting.pycodestyleEnabled": true,
+    "python.linting.pycodestyleArgs": [
+        "--ignore=E501"
+    ],
+
 }

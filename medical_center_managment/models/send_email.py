@@ -18,17 +18,20 @@ class MedicalSendEmail(models.TransientModel):
     """
 
     _name = 'medical.email.send'
-    _inherits = {'mail.compose.message':'composer_id'}
+    _inherits = {'mail.compose.message': 'composer_id'}
     _description = 'Medical Email Send'
 
-    is_email = fields.Boolean('Email', default=lambda self: self.env.company.invoice_is_email)
-    is_print = fields.Boolean('Print', default=lambda self: self.env.company.invoice_is_print)
+    is_email = fields.Boolean(
+        'Email', default=lambda self: self.env.company.invoice_is_email)
+    is_print = fields.Boolean(
+        'Print', default=lambda self: self.env.company.invoice_is_print)
     printed = fields.Boolean('Is Printed', default=False)
-    composer_id = fields.Many2one('mail.compose.message', string='Composer', required=True, ondelete='cascade')
+    composer_id = fields.Many2one(
+        'mail.compose.message', string='Composer', required=True, ondelete='cascade')
     template_id = fields.Many2one(
         'mail.template', 'Use template', index=True,
         domain="[('model', '=', 'doctor.appointment')]"
-        )
+    )
 
     @api.onchange('template_id')
     def onchange_template_id(self):
@@ -39,7 +42,7 @@ class MedicalSendEmail(models.TransientModel):
             if wizard.composer_id:
                 wizard.composer_id.template_id = wizard.template_id.id
                 wizard.composer_id.onchange_template_id_wrapper()
-    
+
     @api.model
     def default_get(self, fields):
         """Creaate the email composer and assigned it to the active records."""
@@ -52,11 +55,11 @@ class MedicalSendEmail(models.TransientModel):
             'composer_id': composer.id,
         })
         return res
-    
+
     def _send_email(self):
         if self.is_email:
             self.composer_id.send_mail()
-    
+
     def send_and_print_action(self):
         """Compute the language of each email (actually it will be the language set on the patient level) \
             then send the email."""
@@ -71,8 +74,10 @@ class MedicalSendEmail(models.TransientModel):
             langs = active_records.mapped('patient_id.lang')
             default_lang = self.env.user.lang
             for lang in (set(langs) or [default_lang]):
-                active_ids_lang = active_records.filtered(lambda r: r.partner_id.lang == lang).ids
-                self_lang = self.with_context(active_ids=active_ids_lang, lang=lang)
+                active_ids_lang = active_records.filtered(
+                    lambda r: r.partner_id.lang == lang).ids
+                self_lang = self.with_context(
+                    active_ids=active_ids_lang, lang=lang)
                 self_lang.onchange_template_id()
                 self_lang._send_email()
         else:

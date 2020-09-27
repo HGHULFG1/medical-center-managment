@@ -17,7 +17,6 @@ doctor_timesheet_access_rights,Doctor timesheet access rights,medical_center_man
 patient_medical_titer_access_rights,Patient medical titer access rightds,medical_center_managment.model_patient_medical_titer,base.group_user,1,1,1,1
 doctor_prescription_access_rights,Doctor prescription access rights,medical_center_managment.model_doctor_prescription,base.group_user,1,1,1,1
 medical_measurements_access_rights,Medical measurement access rights,medical_center_managment.model_medical_measurements,base.group_user,1,1,1,1
-medical_examinations_access_rights,Medical examination access rights,medical_center_managment.model_medical_examination,base.group_user,1,1,1,1
 medical_measurement_uom_access_rights,Medical measurements uom access rights,medical_center_managment.model_medical_measurements_uom,base.group_user,1,1,1,1
 medical_medical_measure_age_access_rights,Medical measurements age ranges access rights,medical_center_managment.model_medical_measure_age,base.group_user,1,1,1,1
 medical_medical_patient_measure_access_rights,Medical patient measure access rights,medical_center_managment.model_medical_patient_measure,base.group_user,1,1,1,1

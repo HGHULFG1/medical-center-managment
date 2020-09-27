@@ -3,7 +3,13 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [
+    "configurations": [{
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
         {
             "name": "Python: Odoo",
             "type": "python",
@@ -11,15 +17,14 @@
             "program": "/odoo/odoo-server/odoo-bin",
             "args": [
                 "--addons-path=/odoo/odoo-server/addons,/odoo/odoo-server/enterprise-13.0,/odoo/custom/addons/medical-center-managment",
-                "-d medical_center_managment"
+                "--dev=xml",
+                "-d  medical_center_managment",
+                "-p 8070"
             ],
             "env": {},
-            
-            
-        }
 
-        
-            
+
+        }
     ]
-    
+
 }

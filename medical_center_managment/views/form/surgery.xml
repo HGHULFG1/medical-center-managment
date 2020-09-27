@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
+<!-- TODO Add the prevented medicines -->
     <!-- surgery.type form view -->
     <record id="surgery_type_view_form" model="ir.ui.view">
         <field name="name">surgery.type.view.form</field>

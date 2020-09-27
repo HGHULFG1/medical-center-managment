@@ -1,7 +1,7 @@
 import json
 import logging
 from datetime import datetime
-from datetime import timedelta,timezone
+from datetime import timedelta
 from odoo import http
 from odoo.http import request
 import werkzeug.wrappers
@@ -10,6 +10,7 @@ _logger = logging.getLogger(__name__)
 
 expires_in = "medical_center_managment.access_token_expires_in"
 
+
 class AccessToken(http.Controller):
     """."""
 
@@ -17,9 +18,11 @@ class AccessToken(http.Controller):
         self._token = request.env["api.access_token"]
         self._expires_in = request.env.ref(expires_in).sudo().value
         self.value = False
+
     @http.route(
         "/api/auth/token", methods=["GET"], type="http", auth="none", csrf=False
     )
+
     def token(self, **post):
  
         _token = request.env["api.access_token"]
