@@ -19,7 +19,8 @@
                 "--addons-path=/odoo/odoo-server/addons,/odoo/odoo-server/enterprise-13.0,/odoo/custom/addons/medical-center-managment",
                 "--dev=xml",
                 "-d  medical_center_managment",
-                "-p 8070"
+                "-p 8070",
+                "-u medical_center_managment"
             ],
             "env": {},
 
