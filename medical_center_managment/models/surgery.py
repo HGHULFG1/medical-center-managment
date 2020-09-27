@@ -42,8 +42,9 @@ class Surgery(models.Model):
     surgery_type_id = fields.Many2one(
         'surgery.type', string='Surgery', required=True)
     patient_id = fields.Many2one(
-        'res.partner', string="Patient", required=True)
-    doctor_id = fields.Many2one('res.partner', string='Doctor', required=True)
+        'res.partner', string="Patient", required=True, domain="[('partner_type','=','patient')]")
+    doctor_id = fields.Many2one(
+        'res.partner', string='Doctor', required=True, domain="[('partner_type','=','dr')]")
     comment = fields.Text(string='Note')
     scheduled_date = fields.Datetime('Scheduled Date', required=True)
     name = fields.Char('Name', translate=True, compute="_compute_name")
