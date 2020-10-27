@@ -1,4 +1,4 @@
 
 # medical-center-managments
-# medical-center-managment ...
+# please read full documentation before creating a PR
 
