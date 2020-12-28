@@ -133,7 +133,7 @@ class DoctorAppointment(models.Model):
         lang = self.patient_id.lang
         if template and template.lang:
             lang = template._render_template(
-                template.lang, 'doctor.appointment', self.id)
+                template.lang, 'doctor.appointment', self.ids)
         compose_form = self.env.ref(
             'medical_center_managment.medical_email_send_wizard_form', raise_if_not_found=False)
         ctx = dict(
