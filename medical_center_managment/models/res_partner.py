@@ -21,7 +21,8 @@ import pytz
 import datetime
 from math import modf
 import logging
-from odoo.addons.medical_center_managment.models.exceptions.custom_exceptions import InvalidMeeting
+from odoo.exceptions import UserError
+from .exceptions.custom_exceptions import InvalidMeeting
 from pytz import timezone
 
 from odoo.tools.translate import translate
@@ -31,9 +32,10 @@ _logger = logging.getLogger(__name__)
 class DoctorStatus(models.Model):
     """."""
 
+    # ordering by name (avoid ordering by the name, translated field!)
     _name = "doctor.status"
     _description = "Doctor Status"
-    _order = "name, id"
+    _order = "id"
     name = fields.Char("Name", required=True, Translate=True)
 
 
@@ -62,8 +64,6 @@ class DoctorSpeciality(models.Model):
     _description = "Doctor Speciality"
     _order = "name, id"
     name = fields.Char("Speciality", required=True, Translate=True)
-    # surgery = fields.Boolean("Surgery")
-    # children = fields.Boolean("Children Speciality")
     tag_ids = fields.Many2many("speciality.tag")
     doctor_ids = fields.One2many(
         "res.partner", "speciality_id", domain="[('partner_type','=','dr')]", string="Doctors")
@@ -167,7 +167,6 @@ class Desease(models.Model):
 
 
 class MedicalAssurance(models.Model):
-    """."""
 
     _name = "medical.assurance"
     _description = "Medical Assurance"
@@ -180,7 +179,7 @@ class ResPartner(models.Model):
 
     _inherit = "res.partner"
     same_name = fields.Boolean(default=False, compute="_compute_same_name")
-    partner_type = fields.Selection([("dr", "Doctor"), ("patient", "Patient"), ("hospital", "Hospital"), (
+    partner_type = fields.Selection([("dr", "Doctor"), ("patient", "Patient"), ("secretary", "Secratary"), ("hospital", "Hospital"), (
         "center", "Medical Center"), ("clinic", "Clinic"), ('insurance', "Insurance")], string="Type")
     gender = fields.Selection([("male", "Male"), ("female", "Female")])
     status = fields.Many2one("doctor.status", string="Status")
@@ -196,7 +195,7 @@ class ResPartner(models.Model):
     clinic_ids = fields.One2many(
         "res.partner", "dr_id", string="Clinics", domain="[('partner_type','=','clinic')]")
     hospital_ids = fields.Many2many("res.partner", "doctor_hospital_rel", "doctor_id",
-                                    "hospital_id",  string="Hospitals", domain="[('partner_type','=','hospital')]")
+                                    "hospital_id", string="Hospitals", domain="[('partner_type','=','hospital')]")
     blood_type = fields.Selection([("a+", "A+"), ("a-", "A-"), ("b+", "B+"), ("b-", "B-"),
                                    ("o+", "O+"), ("o-", "O-"), ("ab+", "AB+"), ("ab-", "AB-")], string="Blood Type")
     date_last_donation = fields.Date("Last Donation Date")
@@ -259,8 +258,32 @@ class ResPartner(models.Model):
     medical_assurance_id = fields.Many2one(
         "res.partner", string="Health Insurance", domain="[('partner_type','=','insurance')]")
     # disability_ids = fields.Many2many('disability', 'disability_partner_rel','contact_id','disability_id',string = "Disabilities")
-    # functions
-    # Please implement me, but before create system parameter refer to tasks, Todo
+    # implement me, but before create system parameter refer to tasks, Todo
+
+    # Secretary
+    secretary_contact_id = fields.Many2one(
+        'res.partner', 'Secratary', domain='[("partner_type","=","secretary")]')
+    
+    @api.onchange("partner_type", "secretary_contact_id")
+    def _onchange_field(self):
+        """Reset the secretary_contact_id when changing the partner_type.
+        """
+        if not self.secretary_contact_id:
+            return
+        if self.partner_type in ['dr', 'patient', 'secretary']:
+            self.update({
+                'secretary_contact_id': False
+            })
+
+    @api.constrains('secretary_contact_id')
+    def _constrains_secretary_contact_id(self):
+        for rec in self:
+            if not rec.secretary_contact_id:
+                continue
+            if rec.partner_type in ['clinic', 'center']:
+                continue
+            raise UserError(
+                _('Only clinics and centers should have secretary'))
 
     @api.depends('disease_ids')
     def _compute_contagious(self):
@@ -281,7 +304,7 @@ class ResPartner(models.Model):
             else:
                 partner.ibw = 0.0
 
-    @api.depends('ibw')
+    @api.depends('gender', 'height')
     def _compute_abw(self):
         for partner in self:
             if partner.weight > 1.3 * partner.ibw and partner.gender and partner.partner_type == 'patient':
@@ -502,7 +525,8 @@ class ResPartner(models.Model):
                     current_timesheet = valid_time
 
         return current_timesheet or valid_timesheets[0]
-# patient related functions
+
+    # patient related functions
 
     def get_age(self):
         """Return the age of the partner in case date of birth specified\
