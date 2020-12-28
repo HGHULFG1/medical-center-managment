@@ -3,7 +3,7 @@
     'name': "Medical Center Managment",
 
     'summary': """
-        This module allows doctors and/or medical center admins to manage their 
+        This module allows doctors and/or medical center admins to manage their
         tasks super easily.  """,
 
     'description': """
@@ -16,7 +16,7 @@ The use of the software will automate many process for patients and doctors as w
 and give the patient and the doctor a very helpful dashboard to ease their tasks, also they will have beatiful and performant reports,
 such as BI reports, medical reports, visit analysis reports.. and so on.
 
-Freatures : 
+Freatures:
 -----------
 1-Multi language:
 
@@ -28,14 +28,14 @@ auto scheduling and timesheet, with custom notifications (inform patient if any 
 
 3-Chating and video call (not confirmed yet)
 
-4-Measurements: 
+4-Measurements:
 
 For example a doctor can schedule a sugar rate measurement for a sugar patient, to be measured six times a day (before and after each meal) , 
 doctor can add thresholds and provide warning messages for them, for example : when sugar rate pass 160 "take insoline 50 unit/ml",
 when sugar rate pass 220 "take insoline 60 unit/ml", when sugar pass 300 "go to hospital immediately"
 so the app. will notify the patient to make the measurements and notify him for warnings if there is any.
 
-5-Schedule medicals : 
+5-Schedule medicals:
 
 For example a doctor add "Siofor 500mg" to a patient, and give it a schedule 3 times per day for duration of 3 monthes, 
 so a notification will be shown on the patient mobile phone each time he needs to take "Siofor 500mg"
@@ -97,10 +97,11 @@ then the system will add the duration in the visit form.
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','mail','base_geolocalize','account','web'],
+    'depends': ['base', 'mail', 'base_geolocalize', 'account', 'web'],
 
     # always loaded
     'data': [
+        'data/medical_security/medical_security.xml',
         'security/ir.model.access.csv',
         'data/data.xml',
         'views/tree/partner.xml',
@@ -117,7 +118,7 @@ then the system will add the duration in the visit form.
         'actions/window_actions/patient_medical.xml',
         'actions/window_actions/appointments.xml',
         'actions/window_actions/patient_measure.xml',
-        'views/form/res_partner.xml', 
+        'views/form/res_partner.xml',
         'actions/window_actions/assurance.xml',
         'actions/window_actions/center.xml',
         'actions/window_actions/patient.xml',
