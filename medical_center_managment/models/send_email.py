@@ -7,6 +7,7 @@ MedicalSendEmail: inherits the email composer, but has its own template id.
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+from odoo.addons.mail.wizard.mail_compose_message import _reopen
 
 
 class MedicalSendEmail(models.TransientModel):
@@ -85,3 +86,11 @@ class MedicalSendEmail(models.TransientModel):
         # if self.is_print:
         #     return self._print_document()
         return {'type': 'ir.actions.act_window_close'}
+
+    def save_as_template(self):
+        self.ensure_one()
+        self.composer_id.save_as_template()
+        self.template_id = self.composer_id.template_id.id
+        action = _reopen(self, self.id, self.model, context=self._context)
+        action.update({'name': _('Send Invoice')})
+        return action
