@@ -11,7 +11,7 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Python: Odoo",
+            "name": "Python: Odoo14",
             "type": "python",
             "request": "launch",
             "program": "/odoo/odoo-server/odoo-bin",
