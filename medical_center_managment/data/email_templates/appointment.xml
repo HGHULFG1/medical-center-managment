@@ -30,7 +30,6 @@
             <!-- <field name="report_template" ref="account_invoices"/> -->
             <!-- <field name="report_name">Meeting_${object.name}</field> -->
             <field name="lang">${object.patient_id.lang}</field>
-            <field name="user_signature" eval="False"/>
             <field name="auto_delete" eval="True"/>
         </record>
     </data>
