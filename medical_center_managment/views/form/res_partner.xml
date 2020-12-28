@@ -63,9 +63,8 @@
                     </div>
                     <group>
                         <group>
-                                 <label for="" name="address_name">
-                                <b>Address</b>
-                            </label>
+                            <label for="street" string="Address"/>
+                            
                             <div class="o_address_format">
 
                                 <field name="street" placeholder="Street..." class="o_address_street" string = "Address" />
@@ -145,9 +144,9 @@
                                             </div>
                                             <br/>
                            <group>
-                                <label for="" name="address_name">
-                                <b>Clinic Address</b>
-                            </label>
+                              
+                            <label for="street" string="Clinic Address"/>
+                            
                                         <div class="o_address_format">
 
                                             <field name="street" placeholder="Street..." class="o_address_street" string = "Address" />
@@ -199,19 +198,19 @@
                                         </t>
                                     </templates>
                                 </kanban>
-                           <form string="Hospitals" >
+                           <form string="Centers" >
                                     <sheet>
                                             <div class="oe_title">
                                             <h1>
-                                                <field name="name" default_focus="1" placeholder="Hospital Name"/>
+                                                <field name="name" default_focus="1" placeholder="Center Name"/>
                                             </h1>
 
                                             </div>
                                             <br/>
                            <group>
-                                <label for="" name="address_name">
-                                <b>Hospital Address</b>
-                            </label>
+                                
+                            <label for="street" string="Center Address"/>
+                            
                                         <div class="o_address_format">
 
                                             <field name="street" placeholder="Street..." class="o_address_street" string = "Address" />
@@ -272,9 +271,9 @@
                                             </div>
                                             <br/>
                            <group>
-                                <label for="" name="address_name">
-                                <b>Hospital Address</b>
-                            </label>
+                                
+                            <label for="street" string="Hospital Address"/>
+                           
                                         <div class="o_address_format">
 
                                             <field name="street" placeholder="Street..." class="o_address_street" string = "Address" />
